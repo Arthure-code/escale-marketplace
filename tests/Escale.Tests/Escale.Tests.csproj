@@ -20,6 +20,24 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 
+  <!--
+    Ces deux paquets ne sont pas demandés par le projet. Ils arrivent par
+    NETStandard.Library 1.6.1, que xunit et Fare, la dépendance d'AutoFixture,
+    tirent encore. Leurs versions 4.3.0 portent chacune un avis de sécurité :
+    https://github.com/advisories/GHSA-7jgj-8wvc-jh57
+    https://github.com/advisories/GHSA-cmhx-cq75-c4mj
+    Sur net8.0, c'est le cadriciel qui fournit ces assemblages à l'exécution,
+    mais un avis suit le graphe de dépendances et non ce qui est chargé. Une
+    référence directe vers la version corrigée l'emporte sur la version
+    transitive : c'est ainsi que Microsoft documente le traitement d'une
+    vulnérabilité que l'on ne peut pas corriger chez son auteur.
+    https://learn.microsoft.com/nuget/concepts/dependency-resolution
+  -->
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
