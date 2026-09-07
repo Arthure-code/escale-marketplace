@@ -7,11 +7,13 @@ namespace Escale.Tests.Integration
     // Ouvre une session, active la double authentification avec un vrai code,
     // relève les codes de récupération, puis referme la session. Les tests qui
     // en héritent partent donc d'un compte protégé et déconnecté.
-    public abstract class SessionAvecDeuxFacteurs : SessionConnectee
+    public abstract partial class SessionAvecDeuxFacteurs : SessionConnectee
     {
-        private static readonly Regex Secret = new Regex("secret=([A-Z2-7]+)", RegexOptions.Compiled);
-        private static readonly Regex Recuperation =
-            new Regex("<code class=\"recovery-code\">([^<]+)</code>", RegexOptions.Compiled);
+        [GeneratedRegex("secret=([A-Z2-7]+)")]
+        private static partial Regex Secret();
+
+        [GeneratedRegex("<code class=\"recovery-code\">([^<]+)</code>")]
+        private static partial Regex Recuperation();
 
         protected override string Courriel => FabriqueEscale.Voyageur;
 
@@ -24,7 +26,7 @@ namespace Escale.Tests.Integration
             await base.ApresOuvertureAsync();
 
             string page = await Client.GetStringAsync("/Identity/Account/Manage/EnableAuthenticator");
-            Cle = Secret.Match(page).Groups[1].Value;
+            Cle = Secret().Match(page).Groups[1].Value;
             Assert.NotEqual(string.Empty, Cle);
 
             using (HttpResponseMessage activation = await PosterAsync(
@@ -35,7 +37,7 @@ namespace Escale.Tests.Integration
                 Assert.Equal(HttpStatusCode.Redirect, activation.StatusCode);
 
                 string codes = await Client.GetStringAsync(activation.Headers.Location!.ToString());
-                foreach (System.Text.RegularExpressions.Match trouve in Recuperation.Matches(codes))
+                foreach (System.Text.RegularExpressions.Match trouve in Recuperation().Matches(codes))
                 {
                     Codes.Add(trouve.Groups[1].Value.Trim());
                 }

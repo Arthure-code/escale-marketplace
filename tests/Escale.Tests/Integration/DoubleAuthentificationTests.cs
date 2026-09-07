@@ -6,16 +6,17 @@ namespace Escale.Tests.Integration
 {
     // Le parcours complet de la double authentification : configuration du
     // vérificateur avec un vrai code, codes de récupération, désactivation.
-    public class DoubleAuthentificationTests : SessionConnectee
+    public partial class DoubleAuthentificationTests : SessionConnectee
     {
-        private static readonly Regex Secret = new Regex("secret=([A-Z2-7]+)", RegexOptions.Compiled);
+        [GeneratedRegex("secret=([A-Z2-7]+)")]
+        private static partial Regex Secret();
 
         protected override string Courriel => FabriqueEscale.Voyageur;
 
         private async Task<string> CleAsync()
         {
             string html = await Client.GetStringAsync("/Identity/Account/Manage/EnableAuthenticator");
-            System.Text.RegularExpressions.Match trouve = Secret.Match(html);
+            System.Text.RegularExpressions.Match trouve = Secret().Match(html);
 
             Assert.True(trouve.Success, "Aucune clé partagée sur la page du vérificateur");
             return trouve.Groups[1].Value;
