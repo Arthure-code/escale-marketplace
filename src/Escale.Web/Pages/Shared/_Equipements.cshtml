@@ -1,0 +1,35 @@
+@model Annonce
+@{
+    string taille = (bool)(ViewData["Grand"] ?? false) ? "equipements grand" : "equipements";
+}
+<div class="@taille">
+    @if (Model.Categorie == CategorieAnnonce.Chambre)
+    {
+        @if (Model.Superficie is int m2)
+        {
+            <span class="equip"><svg class="ico"><use href="#i-taille" /></svg>@m2 m²</span>
+        }
+        @if (Model.Couchages is int lits)
+        {
+            <span class="equip"><svg class="ico"><use href="#i-couchages" /></svg>@lits couchage@(lits > 1 ? "s" : "")</span>
+        }
+    }
+    else
+    {
+        @if (Model.Places is int places)
+        {
+            <span class="equip"><svg class="ico"><use href="#i-places" /></svg>@places places</span>
+        }
+        @if (Model.Annee is int annee)
+        {
+            <span class="equip"><svg class="ico"><use href="#i-annee" /></svg>@annee</span>
+        }
+    }
+    @foreach (AnnonceEquipement lien in Model.Equipements)
+    {
+        <span class="equip">
+            <svg class="ico"><use href="#i-@lien.Equipement!.Code" /></svg>
+            @lien.Equipement.Libelle
+        </span>
+    }
+</div>

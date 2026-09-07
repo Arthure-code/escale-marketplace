@@ -1,0 +1,24 @@
+@model EtatCompte
+@{
+    string date = Model.Jusquau?.ToString("d MMMM yyyy") ?? string.Empty;
+}
+@switch (Model.Situation)
+{
+    case SituationCompte.Bloque:
+        <span class="badge badge-rouge">
+            @(Model.Jusquau is null ? "Bloqué jusqu'à nouvel ordre" : "Bloqué jusqu'au " + date)
+        </span>
+        @if (!string.IsNullOrEmpty(Model.Motif))
+        {
+            <div class="muet petit" style="margin-top:4px">@Model.Motif</div>
+        }
+        break;
+
+    case SituationCompte.AbonnementEchu:
+        <span class="badge badge-gris">Abonnement échu le @date</span>
+        break;
+
+    default:
+        <span class="badge badge-vert">Actif</span>
+        break;
+}

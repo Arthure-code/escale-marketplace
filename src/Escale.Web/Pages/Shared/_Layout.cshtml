@@ -1,0 +1,106 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Utilisateur> Connexions
+@inject IPanierService Panier
+@inject IUtilisateurCourant Courant
+@inject IFavorisService Favoris
+@{
+    bool connecte = Connexions.IsSignedIn(User);
+    bool loueur = User.IsInRole(Utilisateur.RoleLoueur);
+    bool administrateur = User.IsInRole(Utilisateur.RoleAdministrateur);
+    string nom = User.Identity?.Name ?? string.Empty;
+    int articles = 0;
+    int misEnFavori = 0;
+
+    // La gestion de compte garde le balisage que Microsoft génère, avec son
+    // vocabulaire de classes : cette marque active la feuille qui l'habille.
+    // Les pages d'entrée (connexion, inscription, mot de passe) portent le
+    // dessin du site et n'en ont pas besoin.
+    bool identite = (ViewContext.RouteData.Values["page"] as string ?? string.Empty)
+        .StartsWith("/Account/Manage", StringComparison.OrdinalIgnoreCase);
+
+    if (connecte)
+    {
+        articles = await Panier.CompterAsync(Courant.Id);
+        misEnFavori = await Favoris.CompterAsync(Courant.Id);
+    }
+}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Escale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @if (identite)
+    {
+        <link rel="stylesheet" href="~/css/identite.css" asp-append-version="true" />
+    }
+</head>
+<body>
+    <partial name="_Symboles" />
+
+    <header class="entete">
+        <div class="env">
+            <a class="marque" asp-page="/Index">
+                <svg class="ico"><use href="#i-escale" /></svg>
+                Escale
+            </a>
+            <nav class="nav">
+                <a asp-page="/Index" asp-route-categorie="Chambre">Chambres</a>
+                <a asp-page="/Index" asp-route-categorie="Voiture">Voitures</a>
+                @if (loueur)
+                {
+                    <a asp-page="/Tableau/Index">Tableau de bord</a>
+                }
+                @if (administrateur)
+                {
+                    <a asp-page="/Administration/Index">Administration</a>
+                }
+                @if (connecte)
+                {
+                    <a asp-page="/Favoris/Index">
+                        Favoris
+                        @if (misEnFavori > 0)
+                        {
+                            <span class="pastille nombre">@misEnFavori</span>
+                        }
+                    </a>
+                    <a asp-page="/Panier/Index">
+                        Panier
+                        @if (articles > 0)
+                        {
+                            <span class="pastille nombre">@articles</span>
+                        }
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" title="@nom">Mon compte</a>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
+                        <button type="submit">Déconnexion</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-area="Identity" asp-page="/Account/Login">Connexion</a>
+                    <a class="actif" asp-area="Identity" asp-page="/Account/Register">Créer un compte</a>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <main class="@(identite ? "identite" : null)">
+        @RenderBody()
+    </main>
+
+    <footer class="pied">
+        <div class="env">
+            <span>Escale, location de chambres et de voitures entre particuliers.</span>
+            <span>Montréal, Québec</span>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

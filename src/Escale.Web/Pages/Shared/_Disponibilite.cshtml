@@ -1,0 +1,25 @@
+@model Offre
+@*
+    Ce que l'annonce laisse sur la période demandée. Une annonce complète
+    reste affichée : elle est signalée, pas retirée. Le « sur N » n'apparaît
+    que si une partie du parc est déjà retenue, sinon il est redondant.
+*@
+@if (Model.EstComplete)
+{
+    <p class="dispo dispo-complet">
+        <svg class="ico"><use href="#i-complet" /></svg>
+        Complet sur ces dates
+    </p>
+}
+else if (Model.EstDernier)
+{
+    <p class="dispo dispo-dernier">
+        Dernier@(Model.Annonce.NomExemplaire == "chambre" ? "e" : "") @Model.Annonce.NomExemplaire disponible
+    </p>
+}
+else if (Model.Total > 1)
+{
+    <p class="dispo">
+        @Model.Restants @Model.Exemplaires(Model.Restants) disponibles@(Model.Restants < Model.Total ? " sur " + Model.Total : "")
+    </p>
+}

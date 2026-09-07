@@ -1,0 +1,81 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Chambres et voitures à louer";
+    ViewData["Favoris"] = Model.Favoris;
+    string d = Model.Debut!.Value.ToString("yyyy-MM-dd");
+    string f = Model.Fin!.Value.ToString("yyyy-MM-dd");
+    int chambres = Model.Resultats.Count(o => o.Annonce.Categorie == CategorieAnnonce.Chambre);
+    int voitures = Model.Resultats.Count - chambres;
+}
+
+<section class="heros">
+    <img class="fond" src="~/images/hero.jpg" alt="" />
+    <span class="voile"></span>
+    <div class="env">
+        <div>
+            <h1>Une chambre, une voiture, <em>une seule escale</em>.</h1>
+            <p class="sous">Réservez le logement et le véhicule au même endroit, auprès de particuliers, sans commission cachée.</p>
+        </div>
+
+        <form class="recherche" method="get">
+            <div class="onglets">
+                <a class="onglet @(Model.Categorie is null ? "actif" : "")" asp-route-debut="@d" asp-route-fin="@f">Tout</a>
+                <a class="onglet @(Model.Categorie == CategorieAnnonce.Chambre ? "actif" : "")" asp-route-categorie="Chambre" asp-route-debut="@d" asp-route-fin="@f">
+                    <svg class="ico"><use href="#i-chambre" /></svg> Chambres
+                </a>
+                <a class="onglet @(Model.Categorie == CategorieAnnonce.Voiture ? "actif" : "")" asp-route-categorie="Voiture" asp-route-debut="@d" asp-route-fin="@f">
+                    <svg class="ico"><use href="#i-voiture" /></svg> Voitures
+                </a>
+            </div>
+            <div class="champs-recherche">
+                <input type="hidden" name="categorie" value="@(Model.Categorie?.ToString() ?? string.Empty)" />
+                <div class="champ">
+                    <label for="debut">Arrivée</label>
+                    <input id="debut" name="debut" type="date" value="@d" />
+                </div>
+                <div class="champ">
+                    <label for="fin">Départ</label>
+                    <input id="fin" name="fin" type="date" value="@f" />
+                </div>
+                <button class="btn btn-primaire" type="submit">
+                    <svg class="ico"><use href="#i-loupe" /></svg> Rechercher
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="env pile">
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <p class="avis avis-info">@Model.Message</p>
+        }
+
+        <div class="entre">
+            <h2>@Model.Resultats.Count offre@(Model.Resultats.Count > 1 ? "s" : "") du @Model.Debut!.Value.ToString("d MMMM") au @Model.Fin!.Value.ToString("d MMMM")</h2>
+            <p class="muet petit">
+                @chambres chambre@(chambres > 1 ? "s" : "") et @voitures voiture@(voitures > 1 ? "s" : "")@if (Model.Completes > 0)
+                {<text>, dont @Model.Completes complète@(Model.Completes > 1 ? "s" : "") sur ces dates</text>}
+            </p>
+        </div>
+
+        @if (Model.Resultats.Count == 0)
+        {
+            <div class="vide">
+                <svg class="ico" style="width:30px;height:30px"><use href="#i-loupe" /></svg>
+                <p>Rien de libre sur cette période. Essayez d'autres dates.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grille">
+                @foreach (Offre offre in Model.Resultats)
+                {
+                    <partial name="_Carte" model="offre" />
+                }
+            </div>
+        }
+    </div>
+</section>

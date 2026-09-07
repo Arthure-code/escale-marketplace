@@ -1,0 +1,32 @@
+@model Offre
+@{
+    Annonce annonce = Model.Annonce;
+    HashSet<int> favoris = ViewData["Favoris"] as HashSet<int> ?? new HashSet<int>();
+    bool estFavori = favoris.Contains(annonce.Id);
+}
+<article class="annonce @(Model.EstComplete ? "complete" : "")">
+    <div class="vue">
+        <a asp-page="/Annonces/Details" asp-route-id="@annonce.Id">
+            <img src="~/images/@annonce.Photo" alt="@annonce.Titre" loading="lazy" />
+        </a>
+        <span class="etiq">@(annonce.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
+        <form method="post" asp-page-handler="Favori" asp-route-id="@annonce.Id" class="coeur-forme">
+            <button class="coeur @(estFavori ? "actif" : "")" type="submit"
+                    title="@(estFavori ? "Retirer des favoris" : "Ajouter aux favoris")"
+                    aria-label="@(estFavori ? "Retirer des favoris" : "Ajouter aux favoris")"
+                    aria-pressed="@(estFavori ? "true" : "false")">
+                <svg class="ico"><use href="#i-coeur" /></svg>
+            </button>
+        </form>
+    </div>
+    <div class="corps">
+        <h3><a asp-page="/Annonces/Details" asp-route-id="@annonce.Id">@annonce.Titre</a></h3>
+        <p class="det">@annonce.Resume</p>
+        <partial name="_Equipements" model="annonce" />
+        <partial name="_Disponibilite" model="Model" />
+        <div class="bas">
+            <span class="prix"><b class="nombre">@annonce.PrixJournalier $</b><span>@annonce.Unite</span></span>
+            <a class="btn btn-second btn-petit" asp-page="/Annonces/Details" asp-route-id="@annonce.Id">Détail</a>
+        </div>
+    </div>
+</article>
