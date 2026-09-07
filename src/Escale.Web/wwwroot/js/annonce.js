@@ -2,7 +2,10 @@
 // mêmes équipements : le formulaire ne montre que ce qui concerne la
 // catégorie choisie.
 (function () {
-    var categorie = document.getElementById('categorie');
+    // Repéré par son nom plutôt que par un identifiant à nous : l'assistant de
+    // balise engendre déjà l'identifiant, et le forcer cassait le lien avec
+    // l'étiquette, qui pointait alors dans le vide.
+    var categorie = document.querySelector('select[name="Saisie.Categorie"]');
 
     if (categorie === null) {
         return;
