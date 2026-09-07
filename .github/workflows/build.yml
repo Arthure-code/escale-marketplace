@@ -11,6 +11,14 @@
 # https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/test-coverage/dotnet-test-coverage
 # Ce sont l'option sonar.cs.cobertura.reportsPaths passée à « begin », et
 # l'étape « dotnet test » qui écrit le rapport.
+#
+# Un écart assumé avec l'exemple officiel : le jeton passe par un bloc « env »
+# au lieu d'être développé directement dans le « run ». Développé sur place, il
+# est inséré dans le script engendré avant exécution ; par « env », il reste en
+# mémoire et n'entre jamais dans ce script. C'est le motif documenté par GitHub
+# et exigé par la règle Sonar githubactions:S7636, que l'exemple officiel de
+# SonarSource enfreint.
+# https://docs.github.com/en/actions/reference/security/secure-use
 name: Build
 on:
   push:
@@ -52,10 +60,12 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Build and analyze
         shell: pwsh
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Arthure-code_escale-marketplace" /o:"arthuredevsecops" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Arthure-code_escale-marketplace" /o:"arthuredevsecops" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml"
           dotnet build
           dotnet test --no-build --collect:"XPlat Code Coverage"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
