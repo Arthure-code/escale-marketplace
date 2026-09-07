@@ -26,7 +26,7 @@ namespace Escale.Web.Repositories
             Utilisateur hugo = await CompteAsync(comptes, motDePasse, "hugo@escale.test", "Hugo Bélanger", Utilisateur.RoleLoueur);
             await CompteAsync(comptes, motDePasse, "camille@escale.test", "Camille Roy", Utilisateur.RoleVoyageur);
 
-            if (!contexte.Equipements.Any())
+            if (!await contexte.Equipements.AnyAsync())
             {
                 contexte.Equipements.AddRange(
                     Equip("douche", "Douche privée", CategorieAnnonce.Chambre),
@@ -48,12 +48,12 @@ namespace Escale.Web.Repositories
                 await contexte.SaveChangesAsync();
             }
 
-            if (contexte.Annonces.Any())
+            if (await contexte.Annonces.AnyAsync())
             {
                 return;
             }
 
-            Dictionary<string, int> codes = contexte.Equipements.ToDictionary(e => e.Code, e => e.Id);
+            Dictionary<string, int> codes = await contexte.Equipements.ToDictionaryAsync(e => e.Code, e => e.Id);
 
             Chambre(contexte, marie.Id, "Chambre très lumineuse",
                 "Plein sud, fenêtres du sol au plafond, vue dégagée sur la baie. Lit double et coin lecture.",

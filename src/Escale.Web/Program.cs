@@ -313,7 +313,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapHealthChecks("/health").AllowAnonymous();
 
-app.Run();
+await app.RunAsync();
 
 // Rendu visible pour les tests d'intégration éventuels.
 public partial class Program { }

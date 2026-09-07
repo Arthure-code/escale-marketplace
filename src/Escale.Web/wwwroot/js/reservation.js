@@ -14,7 +14,7 @@
     var montant = document.getElementById('detail-montant');
     var total = document.getElementById('detail-total');
 
-    var prix = parseInt(formulaire.dataset.prix, 10);
+    var prix = Number.parseInt(formulaire.dataset.prix, 10);
     var unite = formulaire.dataset.unite;
     var jourEnMs = 24 * 60 * 60 * 1000;
 
