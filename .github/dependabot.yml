@@ -16,6 +16,18 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    # Le projet cible net8.0 et s'y tient. Les versions majeures des paquets
+    # Microsoft suivent celles du cadriciel : Entity Framework Core 9 va avec
+    # .NET 9, la 10 avec .NET 10. Les proposer ici n'aurait pas de sens, elles
+    # ne compileraient pas, ou pire, elles compileraient et se comporteraient
+    # autrement. Changer de cadriciel est une décision, pas une mise à jour.
+    #
+    # Les versions mineures et correctives passent toujours, et ce sont elles
+    # qui portent les correctifs de sécurité, donc rien de ce que l'on attend
+    # de Dependabot n'est perdu.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # Les actions employées par le workflow. C'est ce qui a signalé que
   # setup-java v4 était déprécié.

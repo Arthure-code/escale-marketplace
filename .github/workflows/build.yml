@@ -44,6 +44,10 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+    # Déclaré au niveau du travail et non de l'étape : la condition « if »
+    # d'une étape ne voit pas le bloc « env » de cette même étape.
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -72,10 +76,14 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      # GitHub n'expose pas les secrets du dépôt aux demandes de tirage
+      # ouvertes par Dependabot : elles tournent dans un contexte restreint.
+      # Sans cette condition, toute demande de Dependabot échouerait sur un
+      # jeton vide, pour une raison étrangère à ce qu'elle propose.
+      # https://docs.github.com/code-security/dependabot/troubleshooting-dependabot/troubleshooting-dependabot-on-github-actions
       - name: Build and analyze
+        if: env.SONAR_TOKEN != ''
         shell: pwsh
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
@@ -83,6 +91,18 @@ jobs:
           dotnet build
           dotnet test --no-build --collect:"XPlat Code Coverage"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+      # Le repli de la précédente. Sans jeton il n'y a pas d'analyse, mais il
+      # y a toujours une compilation et trois cent dix tests : une demande de
+      # tirage reste vérifiée sur ce qui compte le plus.
+      - name: Build and test
+        if: env.SONAR_TOKEN == ''
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          dotnet build
+          dotnet test --no-build
+
       # Sonar lit le code, pas le graphe de dépendances : une faille connue
       # dans un paquet ne lui apparaît nulle part. Cette étape la cherche
       # avec l'outil de Microsoft prévu pour cela.
