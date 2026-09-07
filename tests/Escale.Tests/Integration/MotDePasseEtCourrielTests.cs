@@ -120,6 +120,25 @@ namespace Escale.Tests.Integration
         }
 
         [Fact]
+        public async Task UnJetonDeChangementDeCourrielForgeEstRejete()
+        {
+            //Etant donné un lien de changement inventé
+            string id = await AvecComptesAsync(async comptes =>
+            {
+                Utilisateur compte = (await comptes.FindByEmailAsync(FabriqueEscale.Loueuse))!;
+                return await comptes.GetUserIdAsync(compte);
+            });
+
+            //Lorsque
+            using HttpResponseMessage reponse = await Client.GetAsync(
+                $"/Identity/Account/ConfirmEmailChange?userId={id}&email=pirate@escale.test&code={Encoder("faux")}");
+
+            //Alors l'adresse n'est pas changée
+            Assert.Equal(HttpStatusCode.OK, reponse.StatusCode);
+            Assert.Contains("Erreur", await reponse.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
         public async Task RenvoyerUneConfirmationNeReveleRienSurLAdresse()
         {
             //Etant donné une adresse inconnue

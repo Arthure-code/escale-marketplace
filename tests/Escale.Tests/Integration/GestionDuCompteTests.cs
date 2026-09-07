@@ -120,6 +120,20 @@ namespace Escale.Tests.Integration
         }
 
         [Fact]
+        public async Task UnCodeDeVerificationVideEstRefuseParLaValidation()
+        {
+            //Etant donné aucun code saisi
+            using HttpResponseMessage reponse = await PosterAsync(
+                "/Identity/Account/Manage/EnableAuthenticator",
+                "/Identity/Account/Manage/EnableAuthenticator",
+                ("Input.Code", string.Empty));
+
+            //Alors la validation du modèle arrête la demande avant Identity
+            Assert.Equal(HttpStatusCode.OK, reponse.StatusCode);
+            Assert.Contains("text-danger", await reponse.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
         public async Task ReinitialiserLaCleDuVerificateur()
         {
             //Etant donné
