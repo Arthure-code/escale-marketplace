@@ -1,0 +1,99 @@
+@page
+@model Escale.Web.Pages.Panier.IndexModel
+@{
+    ViewData["Title"] = "Panier";
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div class="entre">
+            <h1>Votre panier</h1>
+            @if (!Model.Contenu.EstVide)
+            {
+                <form method="post" asp-page-handler="Vider">
+                    <button class="btn btn-second btn-petit" type="submit">Vider le panier</button>
+                </form>
+            }
+        </div>
+
+        @if (Model.Contenu.EstVide)
+        {
+            <div class="vide">
+                <svg class="ico" style="width:30px;height:30px"><use href="#i-panier" /></svg>
+                <p>Votre panier est vide.</p>
+                <a class="btn btn-primaire" asp-page="/Index">Voir les offres</a>
+            </div>
+        }
+        else
+        {
+            <div class="deux-colonnes">
+                <div class="pile">
+                    @foreach (LignePanier ligne in Model.Contenu.Lignes)
+                    {
+                        <article class="ligne-panier">
+                            <img src="~/images/@ligne.Annonce!.Photo" alt="@ligne.Annonce.Titre" />
+                            <div>
+                                <span class="badge badge-gris">@(ligne.Annonce.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
+                                <h3 style="margin:6px 0 2px">@ligne.Annonce.Titre</h3>
+                                <p class="muet petit">
+                                    Du @ligne.DateDebut.ToString("d MMMM") au @ligne.DateFin.ToString("d MMMM"),
+                                    @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "") à @ligne.Annonce.PrixJournalier $
+                                </p>
+                                <partial name="_Equipements" model="ligne.Annonce" />
+                            </div>
+                            <div style="display:grid;gap:8px;justify-items:end">
+                                <b class="nombre" style="font-size:20px">@ligne.SousTotal $</b>
+                                <form method="post" asp-page-handler="Retirer" asp-route-id="@ligne.Id">
+                                    <button class="btn btn-danger btn-petit" type="submit">Retirer</button>
+                                </form>
+                            </div>
+                        </article>
+                    }
+                </div>
+
+                <div class="recap">
+                    <h2>Récapitulatif</h2>
+
+                    @if (Model.Contenu.Chambres.Count > 0)
+                    {
+                        <div class="groupe-recap">
+                            <h3><span class="point" style="background:var(--aqua)"></span> Chambres</h3>
+                            @foreach (LignePanier ligne in Model.Contenu.Chambres)
+                            {
+                                <div class="poste">
+                                    <span class="nom">@ligne.Annonce!.Titre</span>
+                                    <span class="mnt nombre">@ligne.SousTotal $</span>
+                                    <span class="calc">@ligne.Annonce.PrixJournalier $ x @ligne.NombreDeJours nuit@(ligne.NombreDeJours > 1 ? "s" : "")</span>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if (Model.Contenu.Voitures.Count > 0)
+                    {
+                        <div class="groupe-recap">
+                            <h3><span class="point" style="background:var(--accent)"></span> Voitures</h3>
+                            @foreach (LignePanier ligne in Model.Contenu.Voitures)
+                            {
+                                <div class="poste">
+                                    <span class="nom">@ligne.Annonce!.Titre</span>
+                                    <span class="mnt nombre">@ligne.SousTotal $</span>
+                                    <span class="calc">@ligne.Annonce.PrixJournalier $ x @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "")</span>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <div class="total-ligne">
+                        <span>Total</span>
+                        <b class="nombre">@Model.Contenu.Total $</b>
+                    </div>
+
+                    <a class="btn btn-primaire" asp-page="/Commandes/Paiement">
+                        <svg class="ico"><use href="#i-carte" /></svg> Passer au paiement
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</section>

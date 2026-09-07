@@ -1,0 +1,77 @@
+@page
+@model Escale.Web.Pages.Commandes.PaiementModel
+@{
+    ViewData["Title"] = "Paiement";
+}
+
+<section class="sec">
+    <div class="env deux-colonnes">
+        <div class="carte-forme">
+            <h1 style="font-size:26px">Paiement</h1>
+            <p class="muet" style="margin:6px 0 18px">Vos informations de carte ne sont pas conservées.</p>
+
+            @if (!string.IsNullOrEmpty(Model.Refus))
+            {
+                <p class="avis avis-erreur" style="margin-bottom:14px">@Model.Refus</p>
+            }
+
+            <form class="forme" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+                <div class="champ">
+                    <label asp-for="Saisie.Titulaire"></label>
+                    <input asp-for="Saisie.Titulaire" autocomplete="off" />
+                    <span asp-validation-for="Saisie.Titulaire" class="text-danger"></span>
+                </div>
+
+                <div class="champ">
+                    <label asp-for="Saisie.Numero"></label>
+                    <input asp-for="Saisie.Numero" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="off" />
+                    <span asp-validation-for="Saisie.Numero" class="text-danger"></span>
+                </div>
+
+                <div class="duo">
+                    <div class="champ">
+                        <label asp-for="Saisie.Expiration"></label>
+                        <input asp-for="Saisie.Expiration" placeholder="12/28" autocomplete="off" />
+                        <span asp-validation-for="Saisie.Expiration" class="text-danger"></span>
+                    </div>
+                    <div class="champ">
+                        <label asp-for="Saisie.Cvc"></label>
+                        <input asp-for="Saisie.Cvc" inputmode="numeric" placeholder="123" autocomplete="off" />
+                        <span asp-validation-for="Saisie.Cvc" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primaire" type="submit">
+                    <svg class="ico"><use href="#i-verrou" /></svg> Payer @Model.Contenu.Total $
+                </button>
+            </form>
+
+        </div>
+
+        <div class="recap">
+            <h2>Votre commande</h2>
+            @foreach (LignePanier ligne in Model.Contenu.Lignes)
+            {
+                <div class="poste">
+                    <span class="nom">@ligne.Annonce!.Titre</span>
+                    <span class="mnt nombre">@ligne.SousTotal $</span>
+                    <span class="calc">
+                        @ligne.DateDebut.ToString("d MMM") au @ligne.DateFin.ToString("d MMM"),
+                        @ligne.NombreDeJours x @ligne.Annonce.PrixJournalier $
+                    </span>
+                </div>
+            }
+            <div class="total-ligne">
+                <span>Total</span>
+                <b class="nombre">@Model.Contenu.Total $</b>
+            </div>
+            <a class="petit" asp-page="/Panier/Index">Modifier le panier</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

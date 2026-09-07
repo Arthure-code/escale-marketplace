@@ -1,0 +1,56 @@
+@page
+@model Escale.Web.Pages.Commandes.ConfirmationModel
+@{
+    ViewData["Title"] = "Commande confirmée";
+}
+
+<section class="sec">
+    <div class="env" style="max-width:720px">
+        <div class="carte-forme pile">
+            <span class="badge badge-vert" style="justify-self:start">
+                <svg class="ico" style="width:14px;height:14px"><use href="#i-coche" /></svg> Paiement accepté
+            </span>
+
+            <h1 style="font-size:26px">Merci, votre réservation est confirmée.</h1>
+            <p class="muet">
+                Commande <b>@Model.Commande.Reference</b>, passée le @Model.Commande.DateCommande.ToLocalTime().ToString("d MMMM yyyy à HH:mm").
+                Réglée par carte se terminant par @Model.Commande.QuatreDerniers, autorisation @Model.Commande.ReferencePaiement.
+            </p>
+
+            <div class="defile">
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th>Réservation</th>
+                            <th>Période</th>
+                            <th class="droite">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (LigneCommande ligne in Model.Commande.Lignes)
+                        {
+                            <tr>
+                                <td>
+                                    <b>@ligne.Titre</b><br />
+                                    <span class="muet petit">@(ligne.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
+                                </td>
+                                <td class="petit">
+                                    @ligne.DateDebut.ToString("d MMM yyyy") au @ligne.DateFin.ToString("d MMM yyyy")<br />
+                                    <span class="muet">@ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "") à @ligne.PrixJournalier $</span>
+                                </td>
+                                <td class="droite nombre"><b>@ligne.SousTotal $</b></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-ligne">
+                <span>Total réglé</span>
+                <b class="nombre">@Model.Commande.Total $</b>
+            </div>
+
+            <a class="btn btn-primaire" asp-page="/Index" style="justify-self:start">Retour aux offres</a>
+        </div>
+    </div>
+</section>
