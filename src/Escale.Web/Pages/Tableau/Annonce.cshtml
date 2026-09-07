@@ -5,13 +5,13 @@
 }
 
 <section class="sec">
-    <div class="env" style="max-width:820px">
+    <div class="env env-etroit">
         <p class="petit"><a asp-page="/Tableau/Index">Retour au tableau de bord</a></p>
 
-        <div class="carte-forme" style="margin-top:12px">
-            <h1 style="font-size:26px">@ViewData["Title"]</h1>
+        <div class="carte-forme carte-espacee">
+            <h1 class="titre-page">@ViewData["Title"]</h1>
 
-            <form class="forme" method="post" enctype="multipart/form-data" style="margin-top:18px">
+            <form class="forme forme-espacee" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Saisie.Id" />
                 <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <fieldset id="bloc-chambre" style="border:none;padding:0;margin:0">
+                <fieldset id="bloc-chambre">
                     <div class="duo">
                         <div class="champ">
                             <label asp-for="Saisie.Superficie"></label>
@@ -86,7 +86,7 @@
                     </div>
                 </fieldset>
 
-                <fieldset id="bloc-voiture" style="border:none;padding:0;margin:0">
+                <fieldset id="bloc-voiture">
                     <div class="trio">
                         <div class="champ">
                             <label asp-for="Saisie.Marque">Marque</label>
@@ -111,9 +111,9 @@
                         @foreach (Equipement equipement in Model.Equipements)
                         {
                             bool coche = Model.EquipementsChoisis.Contains(equipement.Id);
-                            <label class="equip" data-categorie="@equipement.Categorie" style="cursor:pointer">
+                            <label class="equip equip-cliquable" data-categorie="@equipement.Categorie">
                                 <input type="checkbox" name="EquipementsChoisis" value="@equipement.Id"
-                                       checked="@coche" style="width:15px;height:15px;min-height:0;accent-color:var(--accent)" />
+                                       checked="@coche" class="case" />
                                 <svg class="ico"><use href="#i-@equipement.Code" /></svg>
                                 @equipement.Libelle
                             </label>
@@ -121,8 +121,8 @@
                     </div>
                 </fieldset>
 
-                <label class="equip" style="width:fit-content;padding:9px 14px;cursor:pointer">
-                    <input asp-for="Saisie.EstDisponible" style="width:16px;height:16px;min-height:0;accent-color:var(--accent)" />
+                <label class="equip equip-bascule">
+                    <input asp-for="Saisie.EstDisponible" class="case-large" />
                     Visible sur le site public
                 </label>
 

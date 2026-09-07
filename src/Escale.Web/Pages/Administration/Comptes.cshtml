@@ -9,7 +9,7 @@
     <div class="env pile">
         <div>
             <p class="petit"><a asp-page="/Administration/Index">Retour à l'administration</a></p>
-            <h1 style="margin-top:6px">Comptes</h1>
+            <h1 class="titre-suite">Comptes</h1>
             <p class="muet">Un compte bloqué garde ses annonces, mais elles quittent le site jusqu'à la fin du blocage.</p>
         </div>
 
@@ -49,8 +49,7 @@
                                             Nouvelle échéance d'abonnement pour @compte.Email
                                         </label>
                                         <input type="date" id="echeance-@compte.Id" name="echeance"
-                                               value="@echeance.ToString("yyyy-MM-dd")"
-                                               style="min-height:32px;padding:5px 8px;font-size:13px;width:auto" />
+                                               value="@echeance.ToString("yyyy-MM-dd")" class="date-compacte" />
                                         <button class="btn btn-second btn-petit" type="submit">Mettre à jour</button>
                                     </form>
                                 }
@@ -69,9 +68,8 @@
                                 else
                                 {
                                     <details>
-                                        <summary class="btn btn-danger btn-petit" style="list-style:none">Bloquer</summary>
-                                        <form method="post" asp-page-handler="Bloquer" class="forme"
-                                              style="text-align:left;margin-top:10px;min-width:260px">
+                                        <summary class="btn btn-danger btn-petit sans-puce">Bloquer</summary>
+                                        <form method="post" asp-page-handler="Bloquer" class="forme panneau-blocage">
                                             <input type="hidden" asp-for="Saisie.Id" value="@compte.Id" />
                                             <div class="champ">
                                                 <label asp-for="Saisie.Debut"></label>
@@ -81,8 +79,8 @@
                                                 <label asp-for="Saisie.Fin"></label>
                                                 <input asp-for="Saisie.Fin" type="date" value="@aujourdhui.AddDays(30).ToString("yyyy-MM-dd")" />
                                             </div>
-                                            <label class="equip" style="cursor:pointer;padding:8px 12px">
-                                                <input asp-for="Saisie.Indetermine" style="width:15px;height:15px;min-height:0;accent-color:var(--accent)" />
+                                            <label class="equip equip-serre">
+                                                <input asp-for="Saisie.Indetermine" class="case" />
                                                 Jusqu'à nouvel ordre
                                             </label>
                                             <div class="champ">

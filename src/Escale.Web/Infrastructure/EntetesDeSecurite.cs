@@ -8,16 +8,17 @@ namespace Escale.Web.Infrastructure
     // HSTS et la redirection HTTPS ; les autres se posent en écrivant un
     // intergiciel en ligne, comme le documente Microsoft.
     //
-    // La politique de sécurité du contenu n'autorise aucun script en ligne :
-    // c'est la raison pour laquelle les scripts de la fiche et du formulaire
-    // vivent dans wwwroot/js. 'unsafe-inline' reste sur les styles à cause
-    // des attributs style= du balisage.
+    // La politique n'autorise ni script ni style en ligne. C'est la raison pour
+    // laquelle les scripts vivent dans wwwroot/js et pour laquelle aucune vue
+    // ne porte d'attribut style= : chaque déclaration est une classe de la
+    // feuille. Un nonce ne suffirait pas ici, car il ne couvre pas les
+    // attributs style, seulement les balises <style>.
     public static class EntetesDeSecurite
     {
         private const string Politique =
             "default-src 'self'; " +
             "script-src 'self'; " +
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+            "style-src 'self' https://fonts.googleapis.com; " +
             "font-src 'self' https://fonts.gstatic.com; " +
             "img-src 'self' data:; " +
             "connect-src 'self'; " +

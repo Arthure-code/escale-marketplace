@@ -5,13 +5,13 @@
 }
 
 <section class="sec">
-    <div class="env" style="max-width:720px">
+    <div class="env env-moyen">
         <div class="carte-forme pile">
-            <span class="badge badge-vert" style="justify-self:start">
-                <svg class="ico" style="width:14px;height:14px"><use href="#i-coche" /></svg> Paiement accepté
+            <span class="badge badge-vert debut-ligne">
+                <svg class="ico ico-petit"><use href="#i-coche" /></svg> Paiement accepté
             </span>
 
-            <h1 style="font-size:26px">Merci, votre réservation est confirmée.</h1>
+            <h1 class="titre-page">Merci, votre réservation est confirmée.</h1>
             <p class="muet">
                 Commande <b>@Model.Commande.Reference</b>, passée le @Model.Commande.DateCommande.ToLocalTime().ToString("d MMMM yyyy à HH:mm").
                 Réglée par carte se terminant par @Model.Commande.QuatreDerniers, autorisation @Model.Commande.ReferencePaiement.
@@ -50,7 +50,7 @@
                 <b class="nombre">@Model.Commande.Total $</b>
             </div>
 
-            <a class="btn btn-primaire" asp-page="/Index" style="justify-self:start">Retour aux offres</a>
+            <a class="btn btn-primaire debut-ligne" asp-page="/Index">Retour aux offres</a>
         </div>
     </div>
 </section>

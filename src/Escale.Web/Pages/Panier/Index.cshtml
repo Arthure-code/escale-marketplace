@@ -19,7 +19,7 @@
         @if (Model.Contenu.EstVide)
         {
             <div class="vide">
-                <svg class="ico" style="width:30px;height:30px"><use href="#i-panier" /></svg>
+                <svg class="ico ico-grand"><use href="#i-panier" /></svg>
                 <p>Votre panier est vide.</p>
                 <a class="btn btn-primaire" asp-page="/Index">Voir les offres</a>
             </div>
@@ -34,15 +34,15 @@
                             <img src="~/images/@ligne.Bien.Photo" alt="@ligne.Bien.Titre" />
                             <div>
                                 <span class="badge badge-gris">@(ligne.Bien.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
-                                <h3 style="margin:6px 0 2px">@ligne.Bien.Titre</h3>
+                                <h3 class="titre-ligne">@ligne.Bien.Titre</h3>
                                 <p class="muet petit">
                                     Du @ligne.DateDebut.ToString("d MMMM") au @ligne.DateFin.ToString("d MMMM"),
                                     @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "") à @ligne.Bien.PrixJournalier $
                                 </p>
                                 <partial name="_Equipements" model="ligne.Annonce" />
                             </div>
-                            <div style="display:grid;gap:8px;justify-items:end">
-                                <b class="nombre" style="font-size:20px">@ligne.SousTotal $</b>
+                            <div class="colonne-fin">
+                                <b class="nombre montant">@ligne.SousTotal $</b>
                                 <form method="post" asp-page-handler="Retirer" asp-route-id="@ligne.Id">
                                     <button class="btn btn-danger btn-petit" type="submit">Retirer</button>
                                 </form>
@@ -57,7 +57,7 @@
                     @if (Model.Contenu.Chambres.Count > 0)
                     {
                         <div class="groupe-recap">
-                            <h3><span class="point" style="background:var(--aqua)"></span> Chambres</h3>
+                            <h3><span class="point point-chambre"></span> Chambres</h3>
                             @foreach (LignePanier ligne in Model.Contenu.Chambres)
                             {
                                 <div class="poste">
@@ -72,7 +72,7 @@
                     @if (Model.Contenu.Voitures.Count > 0)
                     {
                         <div class="groupe-recap">
-                            <h3><span class="point" style="background:var(--accent)"></span> Voitures</h3>
+                            <h3><span class="point point-voiture"></span> Voitures</h3>
                             @foreach (LignePanier ligne in Model.Contenu.Voitures)
                             {
                                 <div class="poste">

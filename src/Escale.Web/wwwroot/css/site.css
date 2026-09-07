@@ -381,3 +381,53 @@ legend { padding: 0; font-size: 13px; font-weight: 600; color: var(--encre-2); }
 .dispo-dernier { color: var(--accent); }
 .annonce.complete .vue img { filter: grayscale(0.55); opacity: 0.75; }
 .annonce.complete .etiq { background: rgba(255, 255, 255, 0.8); }
+
+
+/* Classes qui remplacent les attributs style= du balisage. Sans elles, la
+   politique de sécurité du contenu doit autoriser 'unsafe-inline' sur les
+   styles, ce qui rouvre la porte à l'injection de CSS. Une déclaration écrite
+   ici est aussi une déclaration qu'on retrouve, au lieu d'être dispersée dans
+   quarante balises. */
+.titre-page { font-size: 26px; }
+.titre-ecran { font-size: 24px; }
+.code-statut { font-size: 52px; }
+.titre-section { font-size: 18px; margin-bottom: 10px; }
+.titre-suite { margin-top: 6px; }
+.titre-ligne { margin: 6px 0 2px; }
+.sous { margin: 6px 0 18px; }
+.decale-haut { margin-top: 4px; }
+
+.ico-grand { width: 30px; height: 30px; }
+.ico-petit { width: 14px; height: 14px; }
+
+.env-moyen { max-width: 720px; }
+.env-etroit { max-width: 820px; }
+.carte-espacee { margin-top: 12px; }
+.forme-espacee { margin-top: 18px; }
+.avis-espace { margin-bottom: 14px; }
+
+.rangee-fin { justify-content: flex-end; }
+.debut-ligne { justify-self: start; }
+.colonne-fin { display: grid; gap: 8px; justify-items: end; }
+.montant { font-size: 20px; }
+
+/* Le sélecteur nomme la balise : `.champ input` impose une largeur pleine aux
+   champs de saisie, et une classe seule perdrait contre lui. L'attribut style
+   gagnait toujours, une classe doit être écrite pour gagner. */
+input.case { width: 15px; height: 15px; min-height: 0; accent-color: var(--accent); }
+input.case-large { width: 16px; height: 16px; min-height: 0; accent-color: var(--accent); }
+input.date-compacte { min-height: 32px; padding: 5px 8px; font-size: 13px; width: auto; }
+.equip-cliquable { cursor: pointer; }
+.equip-serre { cursor: pointer; padding: 8px 12px; }
+.equip-bascule { width: fit-content; padding: 9px 14px; cursor: pointer; }
+
+.date-compacte { min-height: 32px; padding: 5px 8px; font-size: 13px; width: auto; }
+.sans-puce { list-style: none; }
+.panneau-blocage { text-align: left; margin-top: 10px; min-width: 260px; }
+
+.point-chambre { background: var(--aqua); }
+.point-voiture { background: var(--accent); }
+
+/* Le porte-symboles ne doit rien occuper : il ne contient que des définitions
+   réutilisées par <use>. */
+.symboles { position: absolute; }
