@@ -1,0 +1,41 @@
+@page
+@model Escale.Web.Pages.Favoris.IndexModel
+@{
+    ViewData["Title"] = "Favoris";
+    ViewData["Favoris"] = Model.Marques;
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div>
+            <h1>Vos favoris</h1>
+            <p class="muet">Les annonces que vous mettez de côté restent ici cinq jours. La disponibilité est calculée du @Model.Debut.ToString("d MMMM") au @Model.Fin.ToString("d MMMM").</p>
+        </div>
+
+        @if (Model.Retirees > 0)
+        {
+            <p class="avis avis-info">
+                @Model.Retirees annonce@(Model.Retirees > 1 ? "s" : "") de votre liste
+                @(Model.Retirees > 1 ? "ne sont plus disponibles" : "n'est plus disponible") sur le site.
+            </p>
+        }
+
+        @if (Model.Offres.Count == 0)
+        {
+            <div class="vide">
+                <svg class="ico" style="width:30px;height:30px"><use href="#i-coeur" /></svg>
+                <p>Vous n'avez encore rien mis en favori.</p>
+                <a class="btn btn-primaire" asp-page="/Index">Parcourir les offres</a>
+            </div>
+        }
+        else
+        {
+            <div class="grille">
+                @foreach (Offre offre in Model.Offres)
+                {
+                    <partial name="_Carte" model="offre" view-data="ViewData" />
+                }
+            </div>
+        }
+    </div>
+</section>
