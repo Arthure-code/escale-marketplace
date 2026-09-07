@@ -23,7 +23,10 @@ namespace Escale.Web.Areas.Identity.Pages.Account.Manage
         private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
 
-        private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+        // Le schéma est séparé du gabarit : une chaîne commençant par
+        // « otpauth:// » est lue comme une adresse écrite en dur.
+        private const string SchemaAuthenticator = "otpauth";
+        private const string AuthenticatorUriFormat = "{3}://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         public EnableAuthenticatorModel(
             UserManager<Utilisateur> userManager,
@@ -159,7 +162,7 @@ namespace Escale.Web.Areas.Identity.Pages.Account.Manage
             AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
         }
 
-        private string FormatKey(string unformattedKey)
+        private static string FormatKey(string unformattedKey)
         {
             var result = new StringBuilder();
             int currentPosition = 0;
@@ -181,9 +184,10 @@ namespace Escale.Web.Areas.Identity.Pages.Account.Manage
             return string.Format(
                 CultureInfo.InvariantCulture,
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Microsoft.AspNetCore.Identity.UI"),
+                _urlEncoder.Encode("Escale"),
                 _urlEncoder.Encode(email),
-                unformattedKey);
+                unformattedKey,
+                SchemaAuthenticator);
         }
     }
 }

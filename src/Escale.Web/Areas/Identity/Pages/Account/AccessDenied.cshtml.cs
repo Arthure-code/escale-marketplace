@@ -18,6 +18,8 @@ namespace Escale.Web.Areas.Identity.Pages.Account
         /// </summary>
         public void OnGet()
         {
+            // Page d'affichage seule : tout le texte est dans la vue, il n'y a
+            // rien à préparer. Le gestionnaire existe pour répondre au GET.
         }
     }
 }

@@ -19,16 +19,13 @@ namespace Escale.Web.Areas.Identity.Pages.Account.Manage
     public class EmailModel : PageModel
     {
         private readonly UserManager<Utilisateur> _userManager;
-        private readonly SignInManager<Utilisateur> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
             UserManager<Utilisateur> userManager,
-            SignInManager<Utilisateur> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _emailSender = emailSender;
         }
 

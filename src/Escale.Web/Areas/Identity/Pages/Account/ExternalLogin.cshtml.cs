@@ -26,6 +26,10 @@ namespace Escale.Web.Areas.Identity.Pages.Account
     [EnableRateLimiting("sensible")]
     public class ExternalLoginModel : PageModel
     {
+        // Toutes les sorties en échec ramènent à la même page ; la nommer une
+        // fois évite d'avoir à la corriger à quatre endroits.
+        private const string PageConnexion = "./Login";
+
         private readonly SignInManager<Utilisateur> _signInManager;
         private readonly UserManager<Utilisateur> _userManager;
         private readonly IUserStore<Utilisateur> _userStore;
@@ -89,7 +93,7 @@ namespace Escale.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
         
-        public IActionResult OnGet() => RedirectToPage("./Login");
+        public IActionResult OnGet() => RedirectToPage(PageConnexion);
 
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
@@ -105,13 +109,13 @@ namespace Escale.Web.Areas.Identity.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                return RedirectToPage(PageConnexion, new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
                 ErrorMessage = "Error loading external login information.";
-                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                return RedirectToPage(PageConnexion, new { ReturnUrl = returnUrl });
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -149,7 +153,7 @@ namespace Escale.Web.Areas.Identity.Pages.Account
             if (info == null)
             {
                 ErrorMessage = "Error loading external login information during confirmation.";
-                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                return RedirectToPage(PageConnexion, new { ReturnUrl = returnUrl });
             }
 
             if (ModelState.IsValid)
@@ -200,7 +204,7 @@ namespace Escale.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private Utilisateur CreateUser()
+        private static Utilisateur CreateUser()
         {
             try
             {

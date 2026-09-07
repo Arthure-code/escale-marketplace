@@ -189,7 +189,7 @@ namespace Escale.Web.Areas.Identity.Pages.Account
             _ => erreur.Description
         };
 
-        private Utilisateur CreateUser()
+        private static Utilisateur CreateUser()
         {
             try
             {

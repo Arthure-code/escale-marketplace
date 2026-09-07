@@ -21,14 +21,12 @@ namespace Escale.Web.Areas.Identity.Pages.Account
     public class RegisterConfirmationModel : PageModel
     {
         private readonly UserManager<Utilisateur> _userManager;
-        private readonly IEmailSender _sender;
         private readonly OptionsCourriel _courriel;
 
-        public RegisterConfirmationModel(UserManager<Utilisateur> userManager, IEmailSender sender,
+        public RegisterConfirmationModel(UserManager<Utilisateur> userManager,
             IOptions<OptionsCourriel> courriel)
         {
             _userManager = userManager;
-            _sender = sender;
             _courriel = courriel.Value;
         }
 

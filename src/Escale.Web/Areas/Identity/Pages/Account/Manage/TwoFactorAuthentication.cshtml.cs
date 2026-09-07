@@ -16,14 +16,12 @@ namespace Escale.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<Utilisateur> _userManager;
         private readonly SignInManager<Utilisateur> _signInManager;
-        private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<Utilisateur> userManager, SignInManager<Utilisateur> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+            UserManager<Utilisateur> userManager, SignInManager<Utilisateur> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
         }
 
         /// <summary>
