@@ -31,9 +31,9 @@ namespace Escale.Web.Infrastructure
             {
                 IHeaderDictionary entetes = contexte.Response.Headers;
 
-                entetes["Content-Security-Policy"] = Politique;
-                entetes["X-Content-Type-Options"] = "nosniff";
-                entetes["X-Frame-Options"] = "DENY";
+                entetes.ContentSecurityPolicy = Politique;
+                entetes.XContentTypeOptions = "nosniff";
+                entetes.XFrameOptions = "DENY";
                 entetes["Referrer-Policy"] = "strict-origin-when-cross-origin";
                 entetes["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=()";
                 entetes.Remove("X-Powered-By");

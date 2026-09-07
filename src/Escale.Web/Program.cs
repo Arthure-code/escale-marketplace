@@ -249,11 +249,9 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Administration", "EstAdministrateur");
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("EstLoueur", regle => regle.RequireRole(Utilisateur.RoleLoueur, Utilisateur.RoleAdministrateur));
-    options.AddPolicy("EstAdministrateur", regle => regle.RequireRole(Utilisateur.RoleAdministrateur));
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("EstLoueur", regle => regle.RequireRole(Utilisateur.RoleLoueur, Utilisateur.RoleAdministrateur))
+    .AddPolicy("EstAdministrateur", regle => regle.RequireRole(Utilisateur.RoleAdministrateur));
 
 builder.Services.AddHealthChecks();
 
