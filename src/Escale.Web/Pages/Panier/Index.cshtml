@@ -31,13 +31,13 @@
                     @foreach (LignePanier ligne in Model.Contenu.Lignes)
                     {
                         <article class="ligne-panier">
-                            <img src="~/images/@ligne.Annonce!.Photo" alt="@ligne.Annonce.Titre" />
+                            <img src="~/images/@ligne.Bien.Photo" alt="@ligne.Bien.Titre" />
                             <div>
-                                <span class="badge badge-gris">@(ligne.Annonce.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
-                                <h3 style="margin:6px 0 2px">@ligne.Annonce.Titre</h3>
+                                <span class="badge badge-gris">@(ligne.Bien.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</span>
+                                <h3 style="margin:6px 0 2px">@ligne.Bien.Titre</h3>
                                 <p class="muet petit">
                                     Du @ligne.DateDebut.ToString("d MMMM") au @ligne.DateFin.ToString("d MMMM"),
-                                    @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "") à @ligne.Annonce.PrixJournalier $
+                                    @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "") à @ligne.Bien.PrixJournalier $
                                 </p>
                                 <partial name="_Equipements" model="ligne.Annonce" />
                             </div>
@@ -61,9 +61,9 @@
                             @foreach (LignePanier ligne in Model.Contenu.Chambres)
                             {
                                 <div class="poste">
-                                    <span class="nom">@ligne.Annonce!.Titre</span>
+                                    <span class="nom">@ligne.Bien.Titre</span>
                                     <span class="mnt nombre">@ligne.SousTotal $</span>
-                                    <span class="calc">@ligne.Annonce.PrixJournalier $ x @ligne.NombreDeJours nuit@(ligne.NombreDeJours > 1 ? "s" : "")</span>
+                                    <span class="calc">@ligne.Bien.PrixJournalier $ x @ligne.NombreDeJours nuit@(ligne.NombreDeJours > 1 ? "s" : "")</span>
                                 </div>
                             }
                         </div>
@@ -76,9 +76,9 @@
                             @foreach (LignePanier ligne in Model.Contenu.Voitures)
                             {
                                 <div class="poste">
-                                    <span class="nom">@ligne.Annonce!.Titre</span>
+                                    <span class="nom">@ligne.Bien.Titre</span>
                                     <span class="mnt nombre">@ligne.SousTotal $</span>
-                                    <span class="calc">@ligne.Annonce.PrixJournalier $ x @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "")</span>
+                                    <span class="calc">@ligne.Bien.PrixJournalier $ x @ligne.NombreDeJours jour@(ligne.NombreDeJours > 1 ? "s" : "")</span>
                                 </div>
                             }
                         </div>

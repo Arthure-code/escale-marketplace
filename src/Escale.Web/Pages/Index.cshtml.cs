@@ -38,6 +38,13 @@ namespace Escale.Web.Pages
         [DataType(DataType.Date)]
         public DateTime? Fin { get; set; }
 
+        // Les deux dates sont nullables parce que la requête peut les omettre,
+        // mais le gestionnaire les renseigne toujours avant le rendu. Ces deux
+        // lectures épargnent à la vue d'avoir à le réaffirmer.
+        public DateTime DebutChoisi => Debut ?? DateTime.Today;
+
+        public DateTime FinChoisi => Fin ?? DateTime.Today.AddDays(2);
+
         public List<Offre> Resultats { get; private set; } = new List<Offre>();
 
         public int Completes => Resultats.Count(o => o.EstComplete);

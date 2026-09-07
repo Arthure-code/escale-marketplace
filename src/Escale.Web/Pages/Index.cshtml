@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Chambres et voitures à louer";
     ViewData["Favoris"] = Model.Favoris;
-    string d = Model.Debut!.Value.ToString("yyyy-MM-dd");
-    string f = Model.Fin!.Value.ToString("yyyy-MM-dd");
+    string d = Model.DebutChoisi.ToString("yyyy-MM-dd");
+    string f = Model.FinChoisi.ToString("yyyy-MM-dd");
     int chambres = Model.Resultats.Count(o => o.Annonce.Categorie == CategorieAnnonce.Chambre);
     int voitures = Model.Resultats.Count - chambres;
 }
@@ -54,7 +54,7 @@
         }
 
         <div class="entre">
-            <h2>@Model.Resultats.Count offre@(Model.Resultats.Count > 1 ? "s" : "") du @Model.Debut!.Value.ToString("d MMMM") au @Model.Fin!.Value.ToString("d MMMM")</h2>
+            <h2>@Model.Resultats.Count offre@(Model.Resultats.Count > 1 ? "s" : "") du @Model.DebutChoisi.ToString("d MMMM") au @Model.FinChoisi.ToString("d MMMM")</h2>
             <p class="muet petit">
                 @chambres chambre@(chambres > 1 ? "s" : "") et @voitures voiture@(voitures > 1 ? "s" : "")@if (Model.Completes > 0)
                 {<text>, dont @Model.Completes complète@(Model.Completes > 1 ? "s" : "") sur ces dates</text>}

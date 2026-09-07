@@ -40,7 +40,14 @@ namespace Escale.Web.Pages.Annonces
 
         public bool EstFavori { get; private set; }
 
-        public int NombreDeJours => Math.Max(1, (Fin!.Value.Date - Debut!.Value.Date).Days);
+        // Les deux dates sont nullables parce que la requête peut les omettre,
+        // mais le gestionnaire les renseigne toujours avant le rendu. Ces deux
+        // lectures épargnent à la vue d'avoir à le réaffirmer.
+        public DateTime DebutChoisi => Debut ?? DateTime.Today;
+
+        public DateTime FinChoisi => Fin ?? DateTime.Today.AddDays(2);
+
+        public int NombreDeJours => Math.Max(1, (FinChoisi.Date - DebutChoisi.Date).Days);
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -65,7 +72,7 @@ namespace Escale.Web.Pages.Annonces
             }
 
             ResultatAjout resultat = await _panier.AjouterAsync(
-                _utilisateur.Id, id, Debut!.Value, Fin!.Value);
+                _utilisateur.Id, id, DebutChoisi, FinChoisi);
 
             if (!resultat.Reussi)
             {
@@ -101,7 +108,7 @@ namespace Escale.Web.Pages.Annonces
                 Fin = Debut.Value.AddDays(1);
             }
 
-            Offre? trouvee = await _annonces.ObtenirOffreAsync(id, Debut!.Value, Fin!.Value);
+            Offre? trouvee = await _annonces.ObtenirOffreAsync(id, DebutChoisi, FinChoisi);
 
             if (trouvee is null)
             {

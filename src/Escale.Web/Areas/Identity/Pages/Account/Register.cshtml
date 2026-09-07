@@ -61,12 +61,12 @@
             </form>
         </div>
 
-        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+        @if (Model.ExternalLogins is { Count: > 0 } fournisseurs)
         {
             <div class="carte-forme">
                 <h2 class="petit muet">Ou inscrivez-vous avec</h2>
                 <form id="external-account" class="rangee" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    @foreach (var provider in Model.ExternalLogins!)
+                    @foreach (var provider in fournisseurs)
                     {
                         <button type="submit" class="btn btn-second" name="provider" value="@provider.Name" title="S'inscrire avec votre compte @provider.DisplayName">@provider.DisplayName</button>
                     }

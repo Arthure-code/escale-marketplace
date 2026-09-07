@@ -56,14 +56,14 @@
                 <div class="champ">
                     <label for="debut">Arrivée</label>
                     <input id="debut" name="debut" type="date"
-                           value="@Model.Debut!.Value.ToString("yyyy-MM-dd")"
+                           value="@Model.DebutChoisi.ToString("yyyy-MM-dd")"
                            min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
                 </div>
                 <div class="champ">
                     <label for="fin">Départ</label>
                     <input id="fin" name="fin" type="date"
-                           value="@Model.Fin!.Value.ToString("yyyy-MM-dd")"
-                           min="@Model.Debut.Value.AddDays(1).ToString("yyyy-MM-dd")" required />
+                           value="@Model.FinChoisi.ToString("yyyy-MM-dd")"
+                           min="@Model.DebutChoisi.AddDays(1).ToString("yyyy-MM-dd")" required />
                 </div>
             </div>
 

@@ -55,11 +55,11 @@
             @foreach (LignePanier ligne in Model.Contenu.Lignes)
             {
                 <div class="poste">
-                    <span class="nom">@ligne.Annonce!.Titre</span>
+                    <span class="nom">@ligne.Bien.Titre</span>
                     <span class="mnt nombre">@ligne.SousTotal $</span>
                     <span class="calc">
                         @ligne.DateDebut.ToString("d MMM") au @ligne.DateFin.ToString("d MMM"),
-                        @ligne.NombreDeJours x @ligne.Annonce.PrixJournalier $
+                        @ligne.NombreDeJours x @ligne.Bien.PrixJournalier $
                     </span>
                 </div>
             }
