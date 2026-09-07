@@ -1,0 +1,14 @@
+@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirmation du courriel";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            <h1>@Model.StatusMessage</h1>
+            <a class="btn btn-primaire" asp-page="/Index">Retour à l'accueil</a>
+        </div>
+    </div>
+</section>

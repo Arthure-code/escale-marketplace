@@ -1,0 +1,31 @@
+@page
+@model LoginWithRecoveryCodeModel
+@{
+    ViewData["Title"] = "Code de récupération";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="carte-forme">
+            <h1>Code de récupération</h1>
+            <p class="muet sous">
+                Cette connexion ne sera pas mémorisée tant que vous n'aurez pas fourni un code de votre
+                application d'authentification.
+            </p>
+
+            <form class="forme" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+                <div class="champ">
+                    <label asp-for="Input.RecoveryCode"></label>
+                    <input asp-for="Input.RecoveryCode" autocomplete="off" />
+                    <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primaire">Se connecter</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

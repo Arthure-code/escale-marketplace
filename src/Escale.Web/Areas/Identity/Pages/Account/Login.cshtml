@@ -1,0 +1,59 @@
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Connexion";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="carte-forme">
+            <h1>Connexion</h1>
+            <p class="muet sous">Retrouvez votre panier, vos favoris et vos réservations.</p>
+
+            <form id="account" class="forme" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+                <div class="champ">
+                    <label asp-for="Input.Email">Courriel</label>
+                    <input asp-for="Input.Email" autocomplete="username" aria-required="true" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="champ">
+                    <label asp-for="Input.Password">Mot de passe</label>
+                    <input asp-for="Input.Password" autocomplete="current-password" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <label class="rangee petit">
+                    <input class="case" asp-for="Input.RememberMe" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                </label>
+
+                <button id="login-submit" type="submit" class="btn btn-primaire">Se connecter</button>
+
+                <div class="liens petit">
+                    <a id="forgot-password" asp-page="./ForgotPassword">Mot de passe oublié ?</a>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Créer un compte</a>
+                </div>
+            </form>
+        </div>
+
+        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+        {
+            <div class="carte-forme">
+                <h2 class="petit muet">Ou connectez-vous avec</h2>
+                <form id="external-account" class="rangee" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn btn-second" name="provider" value="@provider.Name" title="Se connecter avec votre compte @provider.DisplayName">@provider.DisplayName</button>
+                    }
+                </form>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

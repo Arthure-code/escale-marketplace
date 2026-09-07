@@ -1,0 +1,24 @@
+@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Déconnexion";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <h1>Se déconnecter</h1>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn btn-primaire">Confirmer la déconnexion</button>
+                </form>
+            }
+            else
+            {
+                <h1>Vous êtes déconnecté</h1>
+                <a class="btn btn-primaire" asp-page="/Index">Retour à l'accueil</a>
+            }
+        </div>
+    </div>
+</section>

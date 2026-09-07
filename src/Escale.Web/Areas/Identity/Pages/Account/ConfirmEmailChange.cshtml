@@ -1,0 +1,14 @@
+@page
+@model ConfirmEmailChangeModel
+@{
+    ViewData["Title"] = "Changement de courriel";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            <h1>@Model.StatusMessage</h1>
+            <a class="btn btn-primaire" asp-page="./Manage/Email">Retour à mon compte</a>
+        </div>
+    </div>
+</section>

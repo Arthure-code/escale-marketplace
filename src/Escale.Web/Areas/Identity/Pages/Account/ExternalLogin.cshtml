@@ -1,0 +1,31 @@
+@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Créer un compte";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="carte-forme">
+            <h1 id="external-login-title">Associez votre compte @Model.ProviderDisplayName</h1>
+            <p id="external-login-description" class="muet sous">
+                Vous êtes authentifié auprès de <strong>@Model.ProviderDisplayName</strong>.
+                Saisissez une adresse de courriel pour terminer la création de votre compte Escale.
+            </p>
+
+            <form class="forme" asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+                <div class="champ">
+                    <label asp-for="Input.Email">Courriel</label>
+                    <input asp-for="Input.Email" autocomplete="email" aria-required="true" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primaire">Créer mon compte</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

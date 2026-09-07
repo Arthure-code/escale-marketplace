@@ -1,0 +1,81 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Créer un compte";
+}
+
+<section class="compte">
+    <div class="boite large">
+        <div class="carte-forme">
+            <h1>Créer un compte</h1>
+            <p class="muet sous">Un seul compte pour réserver, ou pour publier vos propres annonces.</p>
+
+            <form id="registerForm" class="forme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+                <div class="choix">
+                    <label>
+                        <input type="radio" asp-for="Input.Role" value="@Utilisateur.RoleVoyageur" />
+                        <span>
+                            <span class="t">Je réserve</span><br />
+                            <span class="aide">Accès au panier et aux commandes. Gratuit.</span>
+                        </span>
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Input.Role" value="@Utilisateur.RoleLoueur" />
+                        <span>
+                            <span class="t">Je loue mes biens</span><br />
+                            <span class="aide">Tableau de bord, publication d'annonces et suivi des réservations. @RegisterModel.Mensualite $ par mois.</span>
+                        </span>
+                    </label>
+                </div>
+                <span asp-validation-for="Input.Role" class="text-danger"></span>
+
+                <div class="champ">
+                    <label asp-for="Input.NomComplet"></label>
+                    <input asp-for="Input.NomComplet" autocomplete="name" aria-required="true" />
+                    <span asp-validation-for="Input.NomComplet" class="text-danger"></span>
+                </div>
+
+                <div class="champ">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" autocomplete="username" aria-required="true" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="duo">
+                    <div class="champ">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" autocomplete="new-password" aria-required="true" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="champ">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="btn btn-primaire">Créer mon compte</button>
+                <p class="petit muet">Déjà inscrit ? <a asp-page="./Login">Se connecter</a></p>
+            </form>
+        </div>
+
+        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+        {
+            <div class="carte-forme">
+                <h2 class="petit muet">Ou inscrivez-vous avec</h2>
+                <form id="external-account" class="rangee" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn btn-second" name="provider" value="@provider.Name" title="S'inscrire avec votre compte @provider.DisplayName">@provider.DisplayName</button>
+                    }
+                </form>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

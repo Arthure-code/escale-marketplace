@@ -1,0 +1,19 @@
+@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmez votre compte";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            <h1>Vérifiez vos courriels</h1>
+            <p class="muet">Un lien de confirmation a été envoyé à @Model.Email.</p>
+            @if (Model.DisplayConfirmAccountLink)
+            {
+                <p class="petit muet">Aucun serveur d'envoi n'est configuré : <a id="confirm-link" href="@Model.EmailConfirmationUrl">confirmer directement</a>.</p>
+            }
+            <a class="btn btn-primaire" asp-page="./Login">Retour à la connexion</a>
+        </div>
+    </div>
+</section>

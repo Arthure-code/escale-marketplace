@@ -1,0 +1,16 @@
+@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Accès refusé";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            <svg class="ico"><use href="#i-verrou" /></svg>
+            <h1>Cette page ne vous est pas accessible</h1>
+            <p class="muet">Votre compte n'a pas les droits nécessaires. Un compte loueur est requis pour publier, un compte administrateur pour l'administration.</p>
+            <a class="btn btn-primaire" asp-page="/Index">Retour à l'accueil</a>
+        </div>
+    </div>
+</section>

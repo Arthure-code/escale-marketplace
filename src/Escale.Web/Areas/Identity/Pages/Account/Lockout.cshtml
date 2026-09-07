@@ -1,0 +1,15 @@
+@page
+@model LockoutModel
+@{
+    ViewData["Title"] = "Compte verrouillé";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="vide">
+            <h1>Compte temporairement verrouillé</h1>
+            <p class="muet">Trop de tentatives de connexion. Réessayez dans quinze minutes, ou réinitialisez votre mot de passe.</p>
+            <a class="btn btn-primaire" asp-page="./ForgotPassword">Réinitialiser mon mot de passe</a>
+        </div>
+    </div>
+</section>

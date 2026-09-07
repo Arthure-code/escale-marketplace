@@ -1,0 +1,6 @@
+@* La feuille de mise en page d'Escale ne charge pas jQuery pour tout le site :
+   sans cette première balise, jquery.validate ne trouve rien et la validation
+   côté client reste muette sur les pages de compte. *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

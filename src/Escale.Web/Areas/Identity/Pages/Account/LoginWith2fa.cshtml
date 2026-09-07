@@ -1,0 +1,40 @@
+@page
+@model LoginWith2faModel
+@{
+    ViewData["Title"] = "Authentification à deux facteurs";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="carte-forme">
+            <h1>Authentification à deux facteurs</h1>
+            <p class="muet sous">Votre connexion est protégée par une application d'authentification. Saisissez le code affiché.</p>
+
+            <form class="forme" method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <input asp-for="RememberMe" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+                <div class="champ">
+                    <label asp-for="Input.TwoFactorCode"></label>
+                    <input asp-for="Input.TwoFactorCode" autocomplete="off" inputmode="numeric" />
+                    <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+                </div>
+
+                <label class="rangee petit">
+                    <input class="case" asp-for="Input.RememberMachine" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMachine)
+                </label>
+
+                <button type="submit" class="btn btn-primaire">Se connecter</button>
+                <p class="petit muet">
+                    Pas accès à votre application ?
+                    <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">Utiliser un code de récupération</a>.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

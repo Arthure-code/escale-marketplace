@@ -1,0 +1,29 @@
+@page
+@model ResendEmailConfirmationModel
+@{
+    ViewData["Title"] = "Renvoyer la confirmation";
+}
+
+<section class="compte">
+    <div class="boite">
+        <div class="carte-forme">
+            <h1>Renvoyer la confirmation</h1>
+            <p class="muet sous">Entrez votre courriel pour recevoir un nouveau lien de confirmation.</p>
+
+            <form class="forme" method="post">
+                <div asp-validation-summary="All" class="validation-summary-errors" role="alert"></div>
+                <div class="champ">
+                    <label asp-for="Input.Email">Courriel</label>
+                    <input asp-for="Input.Email" aria-required="true" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primaire">Renvoyer</button>
+                <p class="petit muet"><a asp-page="./Login">Retour à la connexion</a></p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

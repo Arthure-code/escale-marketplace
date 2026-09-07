@@ -1,0 +1,133 @@
+/* Les pages du dossier Identity gardent le balisage que Microsoft génère, y
+   compris ses noms de classes. Cette feuille habille ce vocabulaire avec les
+   jetons d'Escale, de sorte que le balisage reste comparable au gabarit
+   d'origine à chaque mise à jour du framework. Tout est porté par `.identite`,
+   posé sur `<main>` uniquement dans cette zone, pour ne rien déborder sur le
+   reste du site. */
+
+.identite {
+  --colonne: 0;
+  max-width: var(--env);
+  margin: 0 auto;
+  padding: 34px var(--gouttiere) 56px;
+}
+
+.identite h1 { font-size: 27px; margin: 0 0 6px; }
+.identite h2 { font-size: 18px; font-weight: 600; color: var(--encre-2); margin: 0 0 4px; }
+.identite h3 { font-size: 20px; margin: 0 0 12px; }
+.identite h4 { font-size: 16px; margin: 18px 0 10px; }
+.identite hr { border: 0; border-top: 1px solid var(--trait); margin: 14px 0 18px; }
+.identite p { margin: 0 0 12px; }
+
+/* Grille. Bootstrap répartit douze colonnes ; les gabarits n'en utilisent que
+   quelques largeurs, reprises ici une par une. */
+.identite .row { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start; }
+.identite [class^="col-md-"] { flex: 1 1 260px; min-width: 0; }
+.identite .col-md-3 { flex: 0 1 250px; }
+.identite .col-md-4 { flex: 0 1 380px; }
+.identite .col-md-6 { flex: 0 1 440px; }
+.identite .col-md-9 { flex: 1 1 420px; }
+.identite .col-md-12 { flex: 1 1 100%; }
+.identite .col-md-offset-2 { margin-left: 0; }
+
+.identite .w-100 { width: 100%; }
+.identite .h-100 { height: 100%; }
+.identite .mb-3 { margin-bottom: 14px; }
+
+/* Champs. L'étiquette flottante de Bootstrap tient au fait que le gabarit pose
+   toujours un `placeholder` : elle remonte dès que le champ n'est plus vide. */
+.identite .form-control,
+.identite .form-select {
+  font: inherit; color: var(--encre); background: var(--fond);
+  border: 1px solid var(--trait); border-radius: var(--r-m);
+  padding: 11px 13px; width: 100%; min-width: 0; min-height: 46px;
+}
+.identite .form-control:focus,
+.identite .form-select:focus { border-color: var(--aqua); outline: none; }
+.identite .form-control:disabled { background: var(--fond-2); color: var(--encre-2); }
+
+.identite .form-floating { position: relative; }
+.identite .form-floating > .form-control,
+.identite .form-floating > .form-select { height: 58px; padding: 23px 13px 7px; }
+.identite .form-floating > .form-control::placeholder { color: transparent; }
+.identite .form-floating > label {
+  position: absolute; top: 0; left: 0; z-index: 2;
+  padding: 17px 13px; margin: 0;
+  font-size: 15px; font-weight: 500; color: var(--encre-2);
+  pointer-events: none; transform-origin: 0 0;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+.identite .form-floating > .form-control:focus ~ label,
+.identite .form-floating > .form-control:not(:placeholder-shown) ~ label,
+.identite .form-floating > .form-control:disabled ~ label,
+.identite .form-floating > .form-select ~ label {
+  transform: scale(0.82) translateY(-9px);
+  color: var(--encre-3);
+}
+
+.identite .form-label { font-size: 13px; font-weight: 600; color: var(--encre-2); }
+.identite .control-label { display: block; }
+.identite .checkbox label { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--encre); cursor: pointer; }
+.identite .checkbox input,
+.identite .form-check-input { width: 17px; height: 17px; min-height: 0; accent-color: var(--accent); }
+
+/* Boutons. `.btn`, `.btn-danger` et `.text-danger` existent déjà dans la
+   feuille du site ; seules les variantes propres au gabarit sont ajoutées. */
+.identite .btn-primary { background: var(--accent); color: #FFFFFF; box-shadow: 0 1px 2px rgba(120, 34, 5, 0.22); }
+.identite .btn-primary:hover { background: var(--accent-fonce); }
+.identite .btn-lg { min-height: 46px; font-size: 15px; }
+.identite .btn-link { background: none; border: 0; padding: 4px 0; min-height: 0; color: var(--aqua); text-decoration: underline; font-size: 13.5px; }
+.identite .btn + .btn, .identite .btn + form { margin-left: 8px; }
+.identite a.btn { display: inline-flex; }
+
+.identite .text-info { color: var(--encre-2); font-size: 14px; }
+.identite .text-success { color: var(--vert); }
+.identite .text-dark { color: var(--encre); }
+.identite .font-weight-bold { font-weight: 700; }
+
+/* Bandeaux d'état. Le partiel choisit le suffixe selon que le message commence
+   par « Erreur ». */
+.identite .alert { border: 1px solid var(--trait); border-radius: var(--r-m); padding: 13px 15px; margin: 0 0 16px; font-size: 14px; position: relative; }
+.identite .alert p:last-child { margin-bottom: 0; }
+.identite .alert-success { background: var(--vert-clair); border-color: rgba(10, 107, 63, 0.3); color: var(--vert); }
+.identite .alert-danger { background: var(--rouge-clair); border-color: rgba(179, 38, 30, 0.34); color: var(--rouge); }
+.identite .alert-warning { background: #FFF6E5; border-color: rgba(150, 100, 0, 0.28); color: #7A5200; }
+.identite .alert-info { background: var(--aqua-clair); border-color: rgba(0, 112, 126, 0.28); color: var(--aqua); }
+.identite .alert-dismissible { padding-right: 44px; }
+.identite .btn-close {
+  position: absolute; top: 10px; right: 12px;
+  width: 22px; height: 22px; min-height: 0; padding: 0;
+  border: 0; border-radius: 6px; background: transparent;
+  cursor: pointer; color: inherit; opacity: 0.6;
+}
+.identite .btn-close::before { content: "\00d7"; font-size: 17px; line-height: 1; }
+.identite .btn-close:hover { opacity: 1; background: rgba(8, 32, 45, 0.07); }
+
+/* Menu latéral de la gestion de compte. */
+.identite .nav-pills { list-style: none; margin: 0; padding: 0; display: flex; gap: 3px; }
+.identite .nav-pills.flex-column { flex-direction: column; }
+.identite .nav-link {
+  display: block; padding: 9px 12px; border-radius: var(--r-s);
+  font-size: 14px; font-weight: 500; color: var(--encre-2); text-decoration: none;
+}
+.identite .nav-link:hover { background: var(--fond-2); color: var(--encre); text-decoration: none; }
+.identite .nav-link.active { background: var(--accent-clair); color: var(--accent); font-weight: 600; }
+
+.identite .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.identite .table td { padding: 10px 12px; border-bottom: 1px solid var(--trait); }
+
+.identite .input-group { display: flex; align-items: stretch; }
+.identite .input-group .form-control { flex: 1 1 auto; }
+.identite .input-group-text { display: flex; align-items: center; padding: 0 12px; border: 1px solid var(--trait); border-left: 0; border-radius: 0 var(--r-m) var(--r-m) 0; background: var(--fond-2); }
+
+.identite ol.list { padding-left: 20px; display: grid; gap: 6px; }
+.identite kbd { background: var(--fond-3); border-radius: var(--r-s); padding: 3px 7px; font-size: 13.5px; letter-spacing: 0.04em; }
+.identite .recovery-code { display: inline-block; background: var(--fond-2); border-radius: var(--r-s); padding: 5px 9px; margin: 2px 0; font-size: 14px; letter-spacing: 0.05em; }
+
+.identite .form-inline, .identite .form-horizontal { display: inline-block; }
+
+@media (max-width: 820px) {
+  .identite { padding: 24px var(--gouttiere) 40px; }
+  .identite .row { gap: 20px; }
+  .identite [class^="col-md-"] { flex: 1 1 100%; }
+}
