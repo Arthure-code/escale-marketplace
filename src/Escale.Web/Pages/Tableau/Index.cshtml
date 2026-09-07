@@ -1,0 +1,141 @@
+@page
+@model Escale.Web.Pages.Tableau.IndexModel
+@{
+    ViewData["Title"] = "Tableau de bord";
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div class="entre">
+            <div>
+                <h1>Tableau de bord</h1>
+                <p class="muet">Vos annonces, leur visibilité et vos réservations.</p>
+            </div>
+            <a class="btn btn-primaire" asp-page="/Tableau/Annonce">Publier une annonce</a>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Alerte))
+        {
+            <p class="avis avis-erreur">@Model.Alerte</p>
+        }
+
+        <div class="stats">
+            <div class="stat">
+                <span class="lab">Annonces</span>
+                <b class="nombre">@Model.Annonces.Count</b>
+                <span class="note">@Model.EnLigne en ligne sur le site</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Réservations</span>
+                <b class="nombre">@Model.Ventes.Count</b>
+                <span class="note">Sur @Model.JoursLoues jour@(Model.JoursLoues > 1 ? "s" : "") au total</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Revenu</span>
+                <b class="nombre">@Model.Revenu $</b>
+                <span class="note">Encaissé sur @Model.Ventes.Count réservation@(Model.Ventes.Count > 1 ? "s" : "")</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Jours loués</span>
+                <b class="nombre">@Model.JoursLoues</b>
+                <span class="note">Nuits et journées de location</span>
+            </div>
+        </div>
+
+        <h2>Mes annonces</h2>
+        @if (Model.Annonces.Count == 0)
+        {
+            <div class="vide">
+                <p>Vous n'avez encore rien publié.</p>
+                <a class="btn btn-primaire" asp-page="/Tableau/Annonce">Publier une annonce</a>
+            </div>
+        }
+        else
+        {
+            <div class="defile">
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Annonce</th>
+                            <th>Catégorie</th>
+                            <th class="droite">Exemplaires</th>
+                            <th class="droite">Tarif</th>
+                            <th>Visibilité</th>
+                            <th class="droite">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Annonce annonce in Model.Annonces)
+                        {
+                            <tr>
+                                <td><img class="vignette" src="~/images/@annonce.Photo" alt="" /></td>
+                                <td>
+                                    <b>@annonce.Titre</b><br />
+                                    <span class="muet petit">@annonce.Resume</span>
+                                </td>
+                                <td>@(annonce.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture")</td>
+                                <td class="droite nombre">@annonce.Exemplaires</td>
+                                <td class="droite nombre">@annonce.PrixJournalier $</td>
+                                <td>
+                                    @if (annonce.EstDisponible)
+                                    {
+                                        <span class="badge badge-vert">En ligne</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-gris">Retirée</span>
+                                    }
+                                </td>
+                                <td class="droite">
+                                    <div class="rangee" style="justify-content:flex-end">
+                                        <form method="post" asp-page-handler="Basculer" asp-route-id="@annonce.Id">
+                                            <button class="btn btn-second btn-petit" type="submit">
+                                                @(annonce.EstDisponible ? "Retirer du site" : "Remettre en ligne")
+                                            </button>
+                                        </form>
+                                        <a class="btn btn-second btn-petit" asp-page="/Tableau/Annonce" asp-route-id="@annonce.Id">Modifier</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <h2>Mes réservations</h2>
+        @if (Model.Ventes.Count == 0)
+        {
+            <div class="vide"><p>Aucune réservation pour le moment.</p></div>
+        }
+        else
+        {
+            <div class="defile">
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th>Annonce</th>
+                            <th>Client</th>
+                            <th>Période</th>
+                            <th>Commande</th>
+                            <th class="droite">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (LigneCommande vente in Model.Ventes)
+                        {
+                            <tr>
+                                <td><b>@vente.Titre</b></td>
+                                <td>@(vente.Commande?.Utilisateur?.NomComplet ?? "Client Escale")</td>
+                                <td class="petit">@vente.DateDebut.ToString("d MMM yyyy") au @vente.DateFin.ToString("d MMM yyyy")</td>
+                                <td class="petit muet">@vente.Commande?.Reference</td>
+                                <td class="droite nombre"><b>@vente.SousTotal $</b></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>

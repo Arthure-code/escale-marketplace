@@ -1,0 +1,140 @@
+@page "{id:int?}"
+@model Escale.Web.Pages.Tableau.AnnonceModel
+@{
+    ViewData["Title"] = Model.Modification ? "Modifier l'annonce" : "Publier une annonce";
+}
+
+<section class="sec">
+    <div class="env" style="max-width:820px">
+        <p class="petit"><a asp-page="/Tableau/Index">Retour au tableau de bord</a></p>
+
+        <div class="carte-forme" style="margin-top:12px">
+            <h1 style="font-size:26px">@ViewData["Title"]</h1>
+
+            <form class="forme" method="post" enctype="multipart/form-data" style="margin-top:18px">
+                <input type="hidden" asp-for="Saisie.Id" />
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+                <div class="duo">
+                    <div class="champ">
+                        <label asp-for="Saisie.Categorie"></label>
+                        <select asp-for="Saisie.Categorie" id="categorie">
+                            <option value="Chambre">Chambre</option>
+                            <option value="Voiture">Voiture</option>
+                        </select>
+                    </div>
+                    <div class="champ">
+                        <label asp-for="Saisie.Exemplaires"></label>
+                        <input asp-for="Saisie.Exemplaires" type="number" min="1" max="200" />
+                        <span class="aide">Combien d'unités identiques vous louez sous cette annonce.</span>
+                        <span asp-validation-for="Saisie.Exemplaires" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="duo">
+                    <div class="champ">
+                        <label asp-for="Saisie.PrixJournalier"></label>
+                        <input asp-for="Saisie.PrixJournalier" type="number" min="1" max="5000" placeholder="90"
+                               value="@(Model.Saisie.PrixJournalier == 0 ? string.Empty : Model.Saisie.PrixJournalier.ToString())" />
+                        <span asp-validation-for="Saisie.PrixJournalier" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="champ">
+                    <label asp-for="Saisie.Titre">Titre</label>
+                    <input asp-for="Saisie.Titre" />
+                    <span asp-validation-for="Saisie.Titre" class="text-danger"></span>
+                </div>
+
+                <div class="champ">
+                    <label asp-for="Saisie.Description">Description</label>
+                    <textarea asp-for="Saisie.Description"></textarea>
+                    <span asp-validation-for="Saisie.Description" class="text-danger"></span>
+                </div>
+
+                <div class="duo">
+                    <div class="champ">
+                        <label asp-for="Fichier">Ajouter votre photo</label>
+                        <input asp-for="Fichier" type="file" accept=".jpg,.jpeg,.png,.webp" />
+                        <span class="aide">JPEG, PNG ou WebP, 4 Mo au maximum.</span>
+                        <span asp-validation-for="Fichier" class="text-danger"></span>
+                    </div>
+                    <div class="champ">
+                        <label asp-for="Saisie.Photo">Ou reprendre une photo du site</label>
+                        <select asp-for="Saisie.Photo">
+                            @foreach (string photo in Model.Photos)
+                            {
+                                <option value="@photo">@photo</option>
+                            }
+                        </select>
+                        <span class="aide">Ignoré si vous téléversez un fichier.</span>
+                    </div>
+                </div>
+
+                <fieldset id="bloc-chambre" style="border:none;padding:0;margin:0">
+                    <div class="duo">
+                        <div class="champ">
+                            <label asp-for="Saisie.Superficie"></label>
+                            <input asp-for="Saisie.Superficie" type="number" min="0" max="2000" />
+                            <span asp-validation-for="Saisie.Superficie" class="text-danger"></span>
+                        </div>
+                        <div class="champ">
+                            <label asp-for="Saisie.Couchages"></label>
+                            <input asp-for="Saisie.Couchages" type="number" min="0" max="20" />
+                            <span asp-validation-for="Saisie.Couchages" class="text-danger"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset id="bloc-voiture" style="border:none;padding:0;margin:0">
+                    <div class="trio">
+                        <div class="champ">
+                            <label asp-for="Saisie.Marque">Marque</label>
+                            <input asp-for="Saisie.Marque" />
+                        </div>
+                        <div class="champ">
+                            <label asp-for="Saisie.Annee"></label>
+                            <input asp-for="Saisie.Annee" type="number" min="1950" max="2100" />
+                            <span asp-validation-for="Saisie.Annee" class="text-danger"></span>
+                        </div>
+                        <div class="champ">
+                            <label asp-for="Saisie.Places"></label>
+                            <input asp-for="Saisie.Places" type="number" min="0" max="12" />
+                            <span asp-validation-for="Saisie.Places" class="text-danger"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="champ">
+                    <label>Ce qui est inclus</label>
+                    <div class="equipements grand">
+                        @foreach (Equipement equipement in Model.Equipements)
+                        {
+                            bool coche = Model.EquipementsChoisis.Contains(equipement.Id);
+                            <label class="equip" data-categorie="@equipement.Categorie" style="cursor:pointer">
+                                <input type="checkbox" name="EquipementsChoisis" value="@equipement.Id"
+                                       checked="@coche" style="width:15px;height:15px;min-height:0;accent-color:var(--accent)" />
+                                <svg class="ico"><use href="#i-@equipement.Code" /></svg>
+                                @equipement.Libelle
+                            </label>
+                        }
+                    </div>
+                </div>
+
+                <label class="equip" style="width:fit-content;padding:9px 14px;cursor:pointer">
+                    <input asp-for="Saisie.EstDisponible" style="width:16px;height:16px;min-height:0;accent-color:var(--accent)" />
+                    Visible sur le site public
+                </label>
+
+                <button class="btn btn-primaire" type="submit">
+                    @(Model.Modification ? "Enregistrer les changements" : "Publier l'annonce")
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/annonce.js" asp-append-version="true"></script>
+}
