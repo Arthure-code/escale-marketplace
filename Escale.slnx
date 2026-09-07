@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Escale.Web/Escale.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Escale.Tests/Escale.Tests.csproj" />
+  </Folder>
+</Solution>
