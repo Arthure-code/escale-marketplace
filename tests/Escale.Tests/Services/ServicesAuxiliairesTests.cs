@@ -32,9 +32,11 @@ namespace Escale.Tests.Services
                 new CourrielJournalService(NullLogger<CourrielJournalService>.Instance);
 
             //Lorsque
-            await service.EnvoyerAsync("camille@escale.test", "Sujet", "<p>Corps</p>");
+            Task envoi = service.EnvoyerAsync("camille@escale.test", "Sujet", "<p>Corps</p>");
+            await envoi;
 
-            //Alors l'application tourne sans compte de messagerie
+            //Alors rien n'est levé : l'application tourne sans compte de messagerie
+            Assert.True(envoi.IsCompletedSuccessfully);
         }
 
         [Fact]

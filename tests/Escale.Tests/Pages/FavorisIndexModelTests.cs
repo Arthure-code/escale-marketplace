@@ -11,6 +11,8 @@ namespace Escale.Tests.Pages
         private readonly Mock<IUtilisateurCourant> _utilisateur = new Mock<IUtilisateurCourant>(MockBehavior.Strict);
         private readonly IndexModel _page;
 
+        private static readonly int[] MarquesAttendues = { 1, 2 };
+
         public FavorisIndexModelTests()
         {
             _utilisateur.SetupGet(u => u.Id).Returns(Utilisateur);
@@ -33,7 +35,7 @@ namespace Escale.Tests.Pages
 
             //Alors
             Assert.Equal(2, _page.Offres.Count);
-            Assert.Equal(new[] { 1, 2 }, _page.Marques.OrderBy(i => i));
+            Assert.Equal(MarquesAttendues, _page.Marques.OrderBy(i => i));
         }
 
         [Fact]

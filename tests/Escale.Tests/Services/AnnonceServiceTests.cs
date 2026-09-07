@@ -10,6 +10,12 @@ namespace Escale.Tests.Services
         private readonly Mock<IDiffusionService> _diffusion = new Mock<IDiffusionService>(MockBehavior.Strict);
         private readonly AnnonceService _service;
 
+        // Champs plutôt que littéraux dans l'appel : un tableau constant
+        // en argument est réalloué à chaque exécution du test.
+        private static readonly int[] OrdreAttendu = { 3, 2, 1 };
+        private static readonly int[] DeuxEquipements = { 1, 2 };
+        private static readonly int[] TroisEquipements = { 1, 2, 3 };
+
         public AnnonceServiceTests()
         {
             _service = new AnnonceService(_annonces.Object, _commandes.Object, _diffusion.Object);
@@ -99,7 +105,7 @@ namespace Escale.Tests.Services
             List<Offre> offres = await _service.RechercherAsync(null, Arrivee, Depart);
 
             //Alors les libres viennent d'abord, du moins cher au plus cher
-            Assert.Equal(new[] { 3, 2, 1 }, offres.Select(o => o.Annonce.Id));
+            Assert.Equal(OrdreAttendu, offres.Select(o => o.Annonce.Id));
         }
 
         [Fact]
@@ -226,7 +232,7 @@ namespace Escale.Tests.Services
             _annonces.Setup(a => a.AjouterAsync(annonce)).Returns(Task.CompletedTask);
 
             //Lorsque
-            await _service.PublierAsync(annonce, "marie", new[] { 1, 2 });
+            await _service.PublierAsync(annonce, "marie", DeuxEquipements);
 
             //Alors l'identité vient de l'appelant
             Assert.Equal("marie", annonce.LoueurId);
@@ -300,13 +306,13 @@ namespace Escale.Tests.Services
             _annonces.Setup(a => a.EnregistrerAsync()).Returns(Task.CompletedTask);
 
             //Lorsque
-            bool modifiee = await _service.ModifierAsync(saisie, "marie", new[] { 1, 2, 3 });
+            bool modifiee = await _service.ModifierAsync(saisie, "marie", TroisEquipements);
 
             //Alors
             Assert.True(modifiee);
             Assert.Equal(250, existante.PrixJournalier);
             Assert.Equal("Nouveau titre", existante.Titre);
-            Assert.Equal(new[] { 1, 2, 3 }, existante.Equipements.Select(e => e.EquipementId));
+            Assert.Equal(TroisEquipements, existante.Equipements.Select(e => e.EquipementId));
         }
 
         [Fact]

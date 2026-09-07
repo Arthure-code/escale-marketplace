@@ -16,6 +16,13 @@ namespace Escale.Tests.Services
         private readonly Mock<IAnnonceService> _annonces = new Mock<IAnnonceService>(MockBehavior.Strict);
         private readonly FavorisService _service;
 
+        // Champs plutôt que littéraux dans l'appel : un tableau constant
+        // en argument est réalloué à chaque exécution du test.
+        private static readonly int[] UnSeul = { 7 };
+        private static readonly int[] LAutre = { 2 };
+        private static readonly int[] DernierEnTete = { 9, 2, 5 };
+        private static readonly int[] OrdreDuCache = { 9, 3 };
+
         public FavorisServiceTests()
         {
             _service = new FavorisService(_cache.Object, _annonces.Object);
@@ -71,7 +78,7 @@ namespace Escale.Tests.Services
 
             //Alors
             Assert.True(ajoute);
-            Assert.Equal(new[] { 7 }, ecrit);
+            Assert.Equal(UnSeul, ecrit);
         }
 
         [Fact]
@@ -86,7 +93,7 @@ namespace Escale.Tests.Services
 
             //Alors
             Assert.False(ajoute);
-            Assert.Equal(new[] { 2 }, ecrit);
+            Assert.Equal(LAutre, ecrit);
         }
 
         [Fact]
@@ -100,7 +107,7 @@ namespace Escale.Tests.Services
             await _service.BasculerAsync(Utilisateur, 9);
 
             //Alors
-            Assert.Equal(new[] { 9, 2, 5 }, ecrit);
+            Assert.Equal(DernierEnTete, ecrit);
         }
 
         [Fact]
@@ -167,7 +174,7 @@ namespace Escale.Tests.Services
             List<Offre> favoris = await _service.ObtenirAsync(Utilisateur, Arrivee, Depart);
 
             //Alors
-            Assert.Equal(new[] { 9, 3 }, favoris.Select(f => f.Annonce.Id));
+            Assert.Equal(OrdreDuCache, favoris.Select(f => f.Annonce.Id));
         }
     }
 }

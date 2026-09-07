@@ -12,6 +12,8 @@ namespace Escale.Tests.Services
         private static readonly byte[] EnteteWebp =
             { 0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50 };
 
+        private static readonly string[] CatalogueAttendu = { "chambre-1.jpg" };
+
         private readonly string _racine;
         private readonly PhotoService _service;
 
@@ -203,7 +205,7 @@ namespace Escale.Tests.Services
             List<string> catalogue = _service.Catalogue();
 
             //Alors
-            Assert.Equal(new[] { "chambre-1.jpg" }, catalogue);
+            Assert.Equal(CatalogueAttendu, catalogue);
         }
     }
 }
