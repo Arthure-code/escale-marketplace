@@ -15,8 +15,6 @@ namespace Escale.Web.Infrastructure
 
         public int Port { get; set; } = 587;
 
-        public bool ActiverSsl { get; set; } = true;
-
         public string? Utilisateur { get; set; }
 
         public string? MotDePasse { get; set; }

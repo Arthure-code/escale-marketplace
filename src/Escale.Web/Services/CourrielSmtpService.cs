@@ -25,9 +25,13 @@ namespace Escale.Web.Services
 
         public async Task EnvoyerAsync(string destinataire, string sujet, string corpsHtml)
         {
+            // Le chiffrement du transport n'est pas une option de configuration :
+            // sans lui, l'identifiant et le mot de passe du compte d'envoi
+            // circulent en clair. Une valeur mal remplie ne doit pas pouvoir
+            // dégrader cela, donc la constante est écrite ici.
             using SmtpClient client = new SmtpClient(_options.Hote, _options.Port)
             {
-                EnableSsl = _options.ActiverSsl,
+                EnableSsl = true,
                 Credentials = new NetworkCredential(_options.Utilisateur, _options.MotDePasse)
             };
 
