@@ -14,15 +14,34 @@ namespace Escale.Tests.Integration
         public const string Loueuse = "marie@escale.test";
         public const string Administrateur = "admin@escale.test";
 
-        private readonly string _base =
-            Path.Combine(Path.GetTempPath(), "escale-test-" + Guid.NewGuid().ToString("N") + ".db");
+        private readonly string _base;
+        private readonly string _environnement;
+        private readonly bool _sienne;
+
+        public FabriqueEscale() : this(null, "Development")
+        {
+        }
+
+        // Interne et non publique : xUnit n'accepte qu'un seul constructeur
+        // public sur une fixture de classe. Une base fournie de l'extérieur
+        // n'est pas supprimée à la fin ; elle appartient à l'appelant, qui
+        // peut vouloir la rouvrir avec un autre environnement.
+        internal FabriqueEscale(string? base_, string environnement)
+        {
+            _sienne = base_ is null;
+            _base = base_ ?? Path.Combine(Path.GetTempPath(),
+                "escale-test-" + Guid.NewGuid().ToString("N") + ".db");
+            _environnement = environnement;
+        }
+
+        public string CheminDeLaBase => _base;
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             // L'environnement de développement est celui qui applique les
             // migrations et remplit le jeu de démonstration au démarrage : les
             // tests disposent donc de vraies annonces et de vrais comptes.
-            builder.UseEnvironment("Development");
+            builder.UseEnvironment(_environnement);
 
             builder.UseSetting("ConnectionStrings:Escale", "Data Source=" + _base);
             builder.UseSetting("Semences:MotDePasse", MotDePasse);
@@ -51,7 +70,7 @@ namespace Escale.Tests.Integration
         {
             base.Dispose(disposing);
 
-            if (disposing && File.Exists(_base))
+            if (disposing && _sienne && File.Exists(_base))
             {
                 try
                 {
