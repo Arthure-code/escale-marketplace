@@ -1,0 +1,61 @@
+# Squelette repris tel quel de la documentation SonarSource, page « GitHub
+# Actions for SonarQube Cloud », exemple .NET :
+# https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/ci-based-analysis/github-actions-for-sonarcloud
+#
+# Trois valeurs y sont des marques à remplacer, et elles seules ont été
+# remplacées ici : le nom de la branche principale, la clé du projet et la clé
+# de l'organisation.
+#
+# Deux lignes ont été ajoutées pour la couverture, l'exemple officiel n'en
+# produisant pas. Leurs paramètres viennent de la page « .NET test coverage » :
+# https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/test-coverage/dotnet-test-coverage
+# Ce sont l'option sonar.cs.cobertura.reportsPaths passée à « begin », et
+# l'étape « dotnet test » qui écrit le rapport.
+name: Build
+on:
+  push:
+    branches:
+      - main # the name of your main branch
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~\.sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarQube scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Build and analyze
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Arthure-code_escale-marketplace" /o:"arthuredevsecops" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml"
+          dotnet build
+          dotnet test --no-build --collect:"XPlat Code Coverage"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
