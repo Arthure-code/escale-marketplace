@@ -25,11 +25,13 @@
             <span class="equip"><svg class="ico"><use href="#i-annee" /></svg>@annee</span>
         }
     }
-    @foreach (AnnonceEquipement lien in Model.Equipements)
+    @* OfType écarte les liens dont l'équipement n'a pas été chargé, ce qui
+       évite l'opérateur de tolérance au nul à chaque tour de boucle. *@
+    @foreach (Equipement equipement in Model.Equipements.Select(lien => lien.Equipement).OfType<Equipement>())
     {
         <span class="equip">
-            <svg class="ico"><use href="#i-@lien.Equipement!.Code" /></svg>
-            @lien.Equipement.Libelle
+            <svg class="ico"><use href="#i-@equipement.Code" /></svg>
+            @equipement.Libelle
         </span>
     }
 </div>

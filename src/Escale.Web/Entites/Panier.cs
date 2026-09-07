@@ -7,18 +7,24 @@ namespace Escale.Web.Entites
     // elle ne regroupe pas.
     public class Panier
     {
+        // Les deux groupes sont calculés une fois, à la construction. En
+        // propriété, chaque lecture refaisait le tri et rendait une nouvelle
+        // liste, ce qu'une propriété ne doit pas faire : la page les lit
+        // plusieurs fois pour l'affichage et pour les sous-totaux.
         public Panier(List<LignePanier> lignes)
         {
             Lignes = lignes;
+            Chambres = lignes.Where(l => Categorie(l) == CategorieAnnonce.Chambre).ToList();
+            Voitures = lignes.Where(l => Categorie(l) == CategorieAnnonce.Voiture).ToList();
         }
 
         public List<LignePanier> Lignes { get; }
 
-        public List<LignePanier> Chambres =>
-            Lignes.Where(l => l.Annonce!.Categorie == CategorieAnnonce.Chambre).ToList();
+        public List<LignePanier> Chambres { get; }
 
-        public List<LignePanier> Voitures =>
-            Lignes.Where(l => l.Annonce!.Categorie == CategorieAnnonce.Voiture).ToList();
+        public List<LignePanier> Voitures { get; }
+
+        private static CategorieAnnonce? Categorie(LignePanier ligne) => ligne.Annonce?.Categorie;
 
         public int Total => Lignes.Sum(l => l.SousTotal);
 

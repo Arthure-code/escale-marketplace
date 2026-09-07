@@ -65,9 +65,23 @@ namespace Escale.Web.Entites
 
         public List<AnnonceEquipement> Equipements { get; set; } = new List<AnnonceEquipement>();
 
-        public string Resume => string.IsNullOrEmpty(Description) ? string.Empty
-            : Description.Length <= 92 ? Description
-            : Description.Substring(0, 90).TrimEnd() + "…";
+        public string Resume
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Description))
+                {
+                    return string.Empty;
+                }
+
+                if (Description.Length <= 92)
+                {
+                    return Description;
+                }
+
+                return Description.Substring(0, 90).TrimEnd() + "…";
+            }
+        }
 
         public string Unite => Categorie == CategorieAnnonce.Chambre ? "par nuit" : "par jour";
 
