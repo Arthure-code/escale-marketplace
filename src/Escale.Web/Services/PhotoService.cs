@@ -23,12 +23,12 @@ namespace Escale.Web.Services
         private static readonly string[] ExtensionsAdmises = { ".jpg", ".jpeg", ".png", ".webp" };
 
         private readonly IWebHostEnvironment _environnement;
-        private readonly ILogger<PhotoService> _journal;
+        private readonly ILogger<PhotoService> _logger;
 
-        public PhotoService(IWebHostEnvironment environnement, ILogger<PhotoService> journal)
+        public PhotoService(IWebHostEnvironment environnement, ILogger<PhotoService> logger)
         {
             _environnement = environnement;
-            _journal = journal;
+            _logger = logger;
         }
 
         public List<string> Catalogue()
@@ -84,7 +84,7 @@ namespace Escale.Web.Services
             // Le nom d'origine vient de l'utilisateur : il passe en paramètre
             // du gabarit, jamais concaténé dans le message. C'est ce qui ferme
             // l'injection dans les journaux.
-            _journal.LogWarning(JournalDeSecurite.TeleversementRefuse,
+            _logger.LogWarning(JournalDeSecurite.TeleversementRefuse,
                 "Téléversement refusé : {Motif}, fichier {Nom}, taille {Taille}",
                 message, nomOrigine, taille);
 

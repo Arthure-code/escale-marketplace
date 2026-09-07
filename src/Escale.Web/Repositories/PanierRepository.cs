@@ -18,7 +18,7 @@ namespace Escale.Web.Repositories
 
         public async Task<List<LignePanier>> ObtenirAsync(string utilisateurId) =>
             await _contexte.LignesPanier
-                .Include(l => l.Annonce).ThenInclude(a => a!.Equipements).ThenInclude(ae => ae.Equipement)
+                .Include(l => l.Annonce!.Equipements).ThenInclude(ae => ae.Equipement)
                 .Where(l => l.UtilisateurId == utilisateurId)
                 .OrderBy(l => l.DateDebut)
                 .ToListAsync();

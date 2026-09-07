@@ -15,12 +15,12 @@ namespace Escale.Web.Services
     public class CourrielSmtpService : ICourrielService
     {
         private readonly OptionsCourriel _options;
-        private readonly ILogger<CourrielSmtpService> _journal;
+        private readonly ILogger<CourrielSmtpService> _logger;
 
-        public CourrielSmtpService(IOptions<OptionsCourriel> options, ILogger<CourrielSmtpService> journal)
+        public CourrielSmtpService(IOptions<OptionsCourriel> options, ILogger<CourrielSmtpService> logger)
         {
             _options = options.Value;
-            _journal = journal;
+            _logger = logger;
         }
 
         public async Task EnvoyerAsync(string destinataire, string sujet, string corpsHtml)
@@ -46,7 +46,7 @@ namespace Escale.Web.Services
 
             await client.SendMailAsync(message);
 
-            _journal.LogInformation("Courriel envoyé à {Destinataire}, sujet {Sujet}", destinataire, sujet);
+            _logger.LogInformation("Courriel envoyé à {Destinataire}, sujet {Sujet}", destinataire, sujet);
         }
     }
 }

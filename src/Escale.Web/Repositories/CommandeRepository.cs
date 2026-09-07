@@ -47,7 +47,7 @@ namespace Escale.Web.Repositories
         public async Task<List<LigneCommande>> ObtenirVentesAsync(string loueurId) =>
             await _contexte.LignesCommande
                 .AsNoTracking()
-                .Include(l => l.Commande).ThenInclude(c => c!.Utilisateur)
+                .Include(l => l.Commande!.Utilisateur)
                 .Where(l => l.LoueurId == loueurId)
                 .OrderByDescending(l => l.DateDebut)
                 .ToListAsync();

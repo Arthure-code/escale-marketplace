@@ -15,14 +15,14 @@ namespace Escale.Web.Services
     {
         private readonly IUtilisateurRepository _comptes;
         private readonly ICourrielService _courriel;
-        private readonly ILogger<FactureService> _journal;
+        private readonly ILogger<FactureService> _logger;
 
         public FactureService(IUtilisateurRepository comptes, ICourrielService courriel,
-            ILogger<FactureService> journal)
+            ILogger<FactureService> logger)
         {
             _comptes = comptes;
             _courriel = courriel;
-            _journal = journal;
+            _logger = logger;
         }
 
         public async Task EnvoyerAsync(Commande commande)
@@ -31,7 +31,7 @@ namespace Escale.Web.Services
 
             if (client?.Email is null)
             {
-                _journal.LogWarning("Facture non envoyée : courriel introuvable pour la commande {Reference}",
+                _logger.LogWarning("Facture non envoyée : courriel introuvable pour la commande {Reference}",
                     commande.Reference);
                 return;
             }

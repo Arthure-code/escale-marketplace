@@ -13,12 +13,12 @@ namespace Escale.Web.Services
     public class UtilisateurService : IUtilisateurService
     {
         private readonly IUtilisateurRepository _comptes;
-        private readonly ILogger<UtilisateurService> _journal;
+        private readonly ILogger<UtilisateurService> _logger;
 
-        public UtilisateurService(IUtilisateurRepository comptes, ILogger<UtilisateurService> journal)
+        public UtilisateurService(IUtilisateurRepository comptes, ILogger<UtilisateurService> logger)
         {
             _comptes = comptes;
-            _journal = journal;
+            _logger = logger;
         }
 
         public Task<List<Utilisateur>> ObtenirTousAsync() => _comptes.ObtenirTousAsync();
@@ -50,7 +50,7 @@ namespace Escale.Web.Services
 
             await _comptes.EnregistrerAsync();
 
-            _journal.LogWarning(JournalDeSecurite.CompteBloque,
+            _logger.LogWarning(JournalDeSecurite.CompteBloque,
                 "Compte {UtilisateurId} bloqué du {Debut} au {Fin}", id, debut.Date, fin?.Date);
 
             return new ResultatAjout(true, fin is null
@@ -71,7 +71,7 @@ namespace Escale.Web.Services
 
             await _comptes.EnregistrerAsync();
 
-            _journal.LogWarning(JournalDeSecurite.CompteDebloque, "Compte {UtilisateurId} débloqué", id);
+            _logger.LogWarning(JournalDeSecurite.CompteDebloque, "Compte {UtilisateurId} débloqué", id);
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace Escale.Web.Services
 
             await _comptes.EnregistrerAsync();
 
-            _journal.LogInformation(JournalDeSecurite.AbonnementModifie,
+            _logger.LogInformation(JournalDeSecurite.AbonnementModifie,
                 "Abonnement du compte {UtilisateurId} porté au {Echeance}", id, echeance?.Date);
             return true;
         }

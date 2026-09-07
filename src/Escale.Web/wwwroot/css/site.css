@@ -69,9 +69,14 @@ img { max-width: 100%; }
 .marque:hover { text-decoration: none; }
 .marque svg { width: 22px; height: 22px; }
 .nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.nav a, .nav button { color: #C7D8E0; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 999px; border: none; background: transparent; cursor: pointer; font-family: inherit; }
-.nav a:hover, .nav button:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.1); text-decoration: none; }
-.nav .actif { color: #FFFFFF; background: rgba(255, 255, 255, 0.14); }
+/* Ces trois règles portent leur fond en toutes lettres au lieu de le laisser
+   transparent ou en alpha. Le rendu est identique, la barre étant déjà de
+   cette teinte, mais le rapport de contraste devient vérifiable sans avoir à
+   deviner ce qu'il y a derrière. Les deux teintes de survol sont le blanc à
+   10 % et à 14 % déjà fondus sur --nuit. */
+.nav a, .nav button { color: #C7D8E0; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 999px; border: none; background-color: #071A26; cursor: pointer; font-family: inherit; }
+.nav a:hover, .nav button:hover { color: #FFFFFF; background-color: #20313C; text-decoration: none; }
+.nav .actif { color: #FFFFFF; background-color: #2A3A44; }
 .nav form { display: inline; }
 .pastille { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; margin-left: 6px; border-radius: 999px; background: var(--accent); color: #FFFFFF; font-size: 12px; font-weight: 700; }
 

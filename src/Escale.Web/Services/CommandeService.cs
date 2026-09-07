@@ -20,18 +20,18 @@ namespace Escale.Web.Services
         private readonly IAnnonceService _annonces;
         private readonly IPaiementService _paiement;
         private readonly IFactureService _facture;
-        private readonly ILogger<CommandeService> _journal;
+        private readonly ILogger<CommandeService> _logger;
 
         public CommandeService(IPanierRepository panier, ICommandeRepository commandes,
             IAnnonceService annonces, IPaiementService paiement, IFactureService facture,
-            ILogger<CommandeService> journal)
+            ILogger<CommandeService> logger)
         {
             _panier = panier;
             _commandes = commandes;
             _annonces = annonces;
             _paiement = paiement;
             _facture = facture;
-            _journal = journal;
+            _logger = logger;
         }
 
         public async Task<ResultatCommande> PasserAsync(string utilisateurId, DonneesCarte carte)
@@ -47,7 +47,7 @@ namespace Escale.Web.Services
             {
                 if (!await _annonces.EstReservableAsync(ligne.AnnonceId, ligne.DateDebut, ligne.DateFin))
                 {
-                    _journal.LogInformation(JournalDeSecurite.ReservationImpossible,
+                    _logger.LogInformation(JournalDeSecurite.ReservationImpossible,
                         "Commande interrompue, annonce {AnnonceId} indisponible pour {UtilisateurId}",
                         ligne.AnnonceId, utilisateurId);
 
@@ -71,7 +71,7 @@ namespace Escale.Web.Services
             {
                 // Le motif du refus, jamais la carte : ni numéro, ni date, ni
                 // code de sécurité ne doivent apparaître dans un journal.
-                _journal.LogWarning(JournalDeSecurite.PaiementRefuse,
+                _logger.LogWarning(JournalDeSecurite.PaiementRefuse,
                     "Paiement refusé pour {UtilisateurId}, montant {Montant}, motif {Motif}",
                     utilisateurId, total, paiement.Message);
 
@@ -91,7 +91,7 @@ namespace Escale.Web.Services
             // écriture, un autre client a pu prendre la dernière unité.
             if (!await _commandes.AjouterSiDisponibleAsync(commande))
             {
-                _journal.LogWarning(JournalDeSecurite.ReservationImpossible,
+                _logger.LogWarning(JournalDeSecurite.ReservationImpossible,
                     "Commande abandonnée à l'écriture, plus d'exemplaire libre pour {UtilisateurId}",
                     utilisateurId);
 
@@ -102,7 +102,7 @@ namespace Escale.Web.Services
 
             await _panier.SupprimerAsync(lignes);
 
-            _journal.LogInformation(JournalDeSecurite.CommandePassee,
+            _logger.LogInformation(JournalDeSecurite.CommandePassee,
                 "Commande {Reference} enregistrée pour {UtilisateurId}, {Lignes} ligne(s), montant {Montant}",
                 commande.Reference, utilisateurId, commande.Lignes.Count, total);
 
@@ -114,7 +114,7 @@ namespace Escale.Web.Services
             }
             catch (System.Exception ex)
             {
-                _journal.LogError(ex, "Facture non envoyée pour la commande {Reference}", commande.Reference);
+                _logger.LogError(ex, "Facture non envoyée pour la commande {Reference}", commande.Reference);
             }
 
             return new ResultatCommande(true, paiement.Message, commande.Reference);

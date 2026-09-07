@@ -10,16 +10,16 @@ namespace Escale.Web.Services
     // développement, celui que documente Microsoft pour tester.
     public class CourrielJournalService : ICourrielService
     {
-        private readonly ILogger<CourrielJournalService> _journal;
+        private readonly ILogger<CourrielJournalService> _logger;
 
-        public CourrielJournalService(ILogger<CourrielJournalService> journal)
+        public CourrielJournalService(ILogger<CourrielJournalService> logger)
         {
-            _journal = journal;
+            _logger = logger;
         }
 
         public Task EnvoyerAsync(string destinataire, string sujet, string corpsHtml)
         {
-            _journal.LogInformation(
+            _logger.LogInformation(
                 "Courriel non envoyé (aucun SMTP configuré). Destinataire {Destinataire}, sujet {Sujet}",
                 destinataire, sujet);
 
