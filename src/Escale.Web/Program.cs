@@ -110,11 +110,11 @@ builder.Services.Configure<OptionsPaiement>(
 
 string fournisseur = builder.Configuration[$"{OptionsPaiement.Section}:Fournisseur"] ?? "Simule";
 
+// Brancher un vrai prestataire revient à écrire une classe qui implémente
+// IPaiementService, puis à ajouter ici la branche qui porte son nom. Rien
+// d'autre dans l'application ne change.
 switch (fournisseur.ToLowerInvariant())
 {
-    // case "stripe":
-    //     builder.Services.AddScoped<IPaiementService, PaiementStripeService>();
-    //     break;
     default:
         builder.Services.AddScoped<IPaiementService, PaiementSimuleService>();
         break;
@@ -315,5 +315,12 @@ app.MapHealthChecks("/health").AllowAnonymous();
 
 await app.RunAsync();
 
-// Rendu visible pour les tests d'intégration éventuels.
-public partial class Program { }
+// Rendu visible pour les tests d'intégration éventuels. Le constructeur protégé
+// dit que cette classe n'est pas faite pour être instanciée : elle n'existe que
+// comme point d'entrée et comme repère de type.
+public partial class Program
+{
+    protected Program()
+    {
+    }
+}

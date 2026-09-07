@@ -116,9 +116,12 @@ namespace Escale.Web.Services
             }
 
             int anneeComplete = annee < 100 ? 2000 + annee : annee;
-            DateTime finDuMois = new DateTime(anneeComplete, mois, 1).AddMonths(1).AddDays(-1);
 
-            return finDuMois >= DateTime.Today;
+            // Une date d'expiration est une date, pas un instant : DateOnly
+            // évite d'avoir à décider d'un fuseau qui n'a pas de sens ici.
+            DateOnly finDuMois = new DateOnly(anneeComplete, mois, 1).AddMonths(1).AddDays(-1);
+
+            return finDuMois >= DateOnly.FromDateTime(DateTime.Today);
         }
     }
 }

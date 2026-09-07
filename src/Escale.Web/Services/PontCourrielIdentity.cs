@@ -16,7 +16,10 @@ namespace Escale.Web.Services
             _courriel = courriel;
         }
 
-        public Task SendEmailAsync(string destinataire, string sujet, string corpsHtml) =>
-            _courriel.EnvoyerAsync(destinataire, sujet, corpsHtml);
+        // Les noms de paramètres sont ceux de l'interface de Microsoft, pas les
+        // nôtres : un appelant qui nomme ses arguments doit retrouver le
+        // contrat qu'il a lu dans la documentation.
+        public Task SendEmailAsync(string email, string subject, string htmlMessage) =>
+            _courriel.EnvoyerAsync(email, subject, htmlMessage);
     }
 }

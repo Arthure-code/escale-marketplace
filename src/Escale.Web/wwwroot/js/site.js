@@ -3,7 +3,7 @@
 // d'une image ne remonte pas. Cela remplace les attributs onerror en ligne,
 // que la politique de sécurité du contenu interdit.
 document.addEventListener('error', function (evenement) {
-    var cible = evenement.target;
+    const cible = evenement.target;
 
     if (cible instanceof HTMLImageElement && !cible.dataset.replie) {
         cible.dataset.replie = 'oui';
