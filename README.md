@@ -99,7 +99,8 @@ Delete `escale.db` to start over.
 
 ASP.NET Core 8 Razor Pages, Entity Framework Core 8, SQLite, ASP.NET Core
 Identity. Repositories, services and interfaces in separate folders, so a page
-never knows which database is behind it. Page model tests with xUnit and Moq.
+never knows which database is behind it. Around three hundred xUnit tests, some
+with Moq on a single class, most driving the whole running site over HTTP.
 
 ## Résumé
 
