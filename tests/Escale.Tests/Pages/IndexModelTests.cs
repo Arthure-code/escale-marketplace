@@ -15,6 +15,10 @@ namespace Escale.Tests.Pages
             _utilisateur.SetupGet(u => u.EstConnecte).Returns(false);
         }
 
+        // Le tableau attendu est un champ et non un littéral posé dans l'appel :
+        // un tableau constant en argument est réalloué à chaque exécution.
+        private static readonly int[] FavorisAttendus = { 2, 7 };
+
         private static readonly DateTime Debut = new DateTime(2026, 11, 3);
         private static readonly DateTime Fin = new DateTime(2026, 11, 5);
 
@@ -123,7 +127,7 @@ namespace Escale.Tests.Pages
             await page.OnGetAsync();
 
             //Alors
-            Assert.Equal(new[] { 2, 7 }, page.Favoris.OrderBy(i => i));
+            Assert.Equal(FavorisAttendus, page.Favoris.OrderBy(i => i));
         }
 
         [Fact]

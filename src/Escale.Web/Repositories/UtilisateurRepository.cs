@@ -22,8 +22,15 @@ namespace Escale.Web.Repositories
         public async Task<Utilisateur?> ObtenirAsync(string id) =>
             await _contexte.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-        public async Task<Utilisateur?> ObtenirParCourrielAsync(string courriel) =>
-            await _contexte.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == courriel.ToUpperInvariant());
+        public async Task<Utilisateur?> ObtenirParCourrielAsync(string courriel)
+        {
+            // La normalisation se fait avant la requête et non dedans : une
+            // comparaison portant un StringComparison ne se traduit pas en SQL,
+            // et Entity Framework la refuserait à l'exécution.
+            string normalise = courriel.ToUpperInvariant();
+
+            return await _contexte.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == normalise);
+        }
 
         // Un rôle par compte dans cette application : la jointure rend donc
         // un dictionnaire, pas une liste.

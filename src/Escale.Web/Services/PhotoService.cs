@@ -58,7 +58,7 @@ namespace Escale.Web.Services
             }
 
             byte[] entete = new byte[12];
-            int lus = await contenu.ReadAsync(entete, 0, entete.Length);
+            int lus = await contenu.ReadAsync(entete.AsMemory(0, entete.Length));
 
             if (lus < entete.Length || !EstUneImage(entete))
             {
@@ -72,7 +72,7 @@ namespace Escale.Web.Services
 
             using (FileStream sortie = File.Create(Path.Combine(dossier, nom)))
             {
-                await sortie.WriteAsync(entete, 0, entete.Length);
+                await sortie.WriteAsync(entete.AsMemory(0, entete.Length));
                 await contenu.CopyToAsync(sortie);
             }
 

@@ -158,7 +158,7 @@ namespace Escale.Web.Services
         private static Offre Offrir(Annonce annonce, int retenus) =>
             new Offre(annonce, annonce.Exemplaires, Math.Max(0, annonce.Exemplaires - retenus));
 
-        private static int Retenus(IReadOnlyDictionary<int, int> compte, int annonceId) =>
+        private static int Retenus(Dictionary<int, int> compte, int annonceId) =>
             compte.TryGetValue(annonceId, out int nombre) ? nombre : 0;
 
         // Le service ne sait pas ce qui empêche une diffusion : il pose la

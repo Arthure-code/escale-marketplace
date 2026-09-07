@@ -15,6 +15,10 @@ namespace Escale.Tests.Pages
         private readonly Mock<IPhotoService> _photos = new Mock<IPhotoService>(MockBehavior.Strict);
         private readonly Mock<IUtilisateurCourant> _utilisateur = new Mock<IUtilisateurCourant>(MockBehavior.Strict);
 
+        // Le tableau attendu est un champ et non un littéral posé dans l'appel :
+        // un tableau constant en argument est réalloué à chaque exécution.
+        private static readonly int[] EquipementsAttendus = { 1 };
+
         public TableauAnnonceModelTests()
         {
             _utilisateur.SetupGet(u => u.Id).Returns("marie");
@@ -100,7 +104,7 @@ namespace Escale.Tests.Pages
             Assert.IsType<PageResult>(resultat);
             Assert.True(page.Modification);
             Assert.Equal("Suite avec balcon", page.Saisie.Titre);
-            Assert.Equal(new[] { 1 }, page.EquipementsChoisis);
+            Assert.Equal(EquipementsAttendus, page.EquipementsChoisis);
         }
 
         [Fact]
