@@ -1,0 +1,99 @@
+@page
+@model Escale.Web.Pages.Administration.ComptesModel
+@{
+    ViewData["Title"] = "Comptes";
+    DateTime aujourdhui = DateTime.Today;
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div>
+            <p class="petit"><a asp-page="/Administration/Index">Retour à l'administration</a></p>
+            <h1 style="margin-top:6px">Comptes</h1>
+            <p class="muet">Un compte bloqué garde ses annonces, mais elles quittent le site jusqu'à la fin du blocage.</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Avis))
+        {
+            <p class="avis avis-info">@Model.Avis</p>
+        }
+
+        <div class="defile">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th>Compte</th>
+                        <th>Rôle</th>
+                        <th>État</th>
+                        <th>Abonnement</th>
+                        <th class="droite">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Utilisateur compte in Model.Comptes)
+                    {
+                        EtatCompte etat = Model.Etat(compte);
+                        bool bloque = etat.Situation == SituationCompte.Bloque;
+                        <tr>
+                            <td>
+                                <b>@compte.NomComplet</b><br />
+                                <span class="muet petit">@compte.Email</span>
+                            </td>
+                            <td>@Model.Role(compte.Id)</td>
+                            <td><partial name="_EtatCompte" model="etat" /></td>
+                            <td class="petit">
+                                @if (compte.Abonnement.Echeance is DateTime echeance)
+                                {
+                                    <form method="post" asp-page-handler="Prolonger" asp-route-id="@compte.Id" class="rangee">
+                                        <input type="date" name="echeance" value="@echeance.ToString("yyyy-MM-dd")"
+                                               style="min-height:32px;padding:5px 8px;font-size:13px;width:auto" />
+                                        <button class="btn btn-second btn-petit" type="submit">Mettre à jour</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="muet">Sans objet</span>
+                                }
+                            </td>
+                            <td class="droite">
+                                @if (bloque)
+                                {
+                                    <form method="post" asp-page-handler="Debloquer" asp-route-id="@compte.Id">
+                                        <button class="btn btn-second btn-petit" type="submit">Débloquer</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <details>
+                                        <summary class="btn btn-danger btn-petit" style="list-style:none">Bloquer</summary>
+                                        <form method="post" asp-page-handler="Bloquer" class="forme"
+                                              style="text-align:left;margin-top:10px;min-width:260px">
+                                            <input type="hidden" asp-for="Saisie.Id" value="@compte.Id" />
+                                            <div class="champ">
+                                                <label asp-for="Saisie.Debut"></label>
+                                                <input asp-for="Saisie.Debut" type="date" value="@aujourdhui.ToString("yyyy-MM-dd")" />
+                                            </div>
+                                            <div class="champ">
+                                                <label asp-for="Saisie.Fin"></label>
+                                                <input asp-for="Saisie.Fin" type="date" value="@aujourdhui.AddDays(30).ToString("yyyy-MM-dd")" />
+                                            </div>
+                                            <label class="equip" style="cursor:pointer;padding:8px 12px">
+                                                <input asp-for="Saisie.Indetermine" style="width:15px;height:15px;min-height:0;accent-color:var(--accent)" />
+                                                Jusqu'à nouvel ordre
+                                            </label>
+                                            <div class="champ">
+                                                <label asp-for="Saisie.Motif">Motif</label>
+                                                <input asp-for="Saisie.Motif" placeholder="Annonce non conforme" />
+                                            </div>
+                                            <button class="btn btn-danger btn-petit" type="submit">Confirmer le blocage</button>
+                                        </form>
+                                    </details>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

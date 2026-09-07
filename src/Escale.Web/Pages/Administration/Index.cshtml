@@ -1,0 +1,75 @@
+@page
+@model Escale.Web.Pages.Administration.IndexModel
+@{
+    ViewData["Title"] = "Administration";
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div class="entre">
+            <div>
+                <h1>Administration</h1>
+                <p class="muet">Tout ce qui est publié sur la plateforme, tous comptes confondus.</p>
+            </div>
+            <div class="rangee">
+                <a class="btn btn-second" asp-page="/Administration/Comptes">Comptes</a>
+                <a class="btn btn-primaire" asp-page="/Administration/Annonces">Annonces</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="lab">Annonces</span>
+                <b class="nombre">@Model.Annonces.Count</b>
+                <span class="note">@Model.EnLigne en ligne, @Model.Retirees hors ligne</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Comptes</span>
+                <b class="nombre">@Model.Comptes.Count</b>
+                <span class="note">dont @Model.Loueurs loueur@(Model.Loueurs > 1 ? "s" : "")</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Comptes bloqués</span>
+                <b class="nombre">@Model.Bloques</b>
+                <span class="note">Leur contenu ne s'affiche pas</span>
+            </div>
+            <div class="stat">
+                <span class="lab">Volume réservé</span>
+                <b class="nombre">@Model.Volume $</b>
+                <span class="note">@Model.Reservations.Count réservation@(Model.Reservations.Count > 1 ? "s" : "")</span>
+            </div>
+        </div>
+
+        <h2>Dernières réservations</h2>
+        @if (Model.Reservations.Count == 0)
+        {
+            <div class="vide"><p>Aucune réservation pour le moment.</p></div>
+        }
+        else
+        {
+            <div class="defile">
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th>Annonce</th>
+                            <th>Période</th>
+                            <th>Commande</th>
+                            <th class="droite">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (LigneCommande reservation in Model.Reservations.Take(15))
+                        {
+                            <tr>
+                                <td><b>@reservation.Titre</b></td>
+                                <td class="petit">@reservation.DateDebut.ToString("d MMM yyyy") au @reservation.DateFin.ToString("d MMM yyyy")</td>
+                                <td class="petit muet">@reservation.Commande?.Reference</td>
+                                <td class="droite nombre"><b>@reservation.SousTotal $</b></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>

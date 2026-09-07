@@ -1,0 +1,84 @@
+@page
+@model Escale.Web.Pages.Administration.AnnoncesModel
+@{
+    ViewData["Title"] = "Toutes les annonces";
+}
+
+<section class="sec">
+    <div class="env pile">
+        <div class="entre">
+            <div>
+                <p class="petit"><a asp-page="/Administration/Index">Retour à l'administration</a></p>
+                <h1 style="margin-top:6px">Toutes les annonces</h1>
+            </div>
+            <a class="btn btn-primaire" asp-page="/Tableau/Annonce">Publier une annonce</a>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Avis))
+        {
+            <p class="avis avis-info">@Model.Avis</p>
+        }
+
+        <div class="defile">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Annonce</th>
+                        <th>Loueur</th>
+                        <th class="droite">Tarif</th>
+                        <th>État</th>
+                        <th class="droite">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Annonce annonce in Model.Annonces)
+                    {
+                        <tr>
+                            <td><img class="vignette" src="~/images/@annonce.Photo" alt="" /></td>
+                            <td>
+                                <b>@annonce.Titre</b><br />
+                                <span class="muet petit">@(annonce.Categorie == CategorieAnnonce.Chambre ? "Chambre" : "Voiture") · @annonce.Resume</span>
+                            </td>
+                            <td>
+                                @(annonce.Loueur?.NomComplet ?? "Compte supprimé")<br />
+                                @if (annonce.Loueur is not null)
+                                {
+                                    <partial name="_EtatCompte" model="Model.Etat(annonce.Loueur)" />
+                                }
+                            </td>
+                            <td class="droite nombre">@annonce.PrixJournalier $</td>
+                            <td>
+                                @if (!annonce.EstDisponible)
+                                {
+                                    <span class="badge badge-gris">Retirée</span>
+                                }
+                                else if (!Model.Diffusable(annonce))
+                                {
+                                    <span class="badge badge-rouge">Masquée</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-vert">En ligne</span>
+                                }
+                            </td>
+                            <td class="droite">
+                                <div class="rangee" style="justify-content:flex-end">
+                                    <form method="post" asp-page-handler="Basculer" asp-route-id="@annonce.Id">
+                                        <button class="btn btn-second btn-petit" type="submit">
+                                            @(annonce.EstDisponible ? "Retirer du site" : "Remettre en ligne")
+                                        </button>
+                                    </form>
+                                    <a class="btn btn-second btn-petit" asp-page="/Tableau/Annonce" asp-route-id="@annonce.Id">Modifier</a>
+                                    <form method="post" asp-page-handler="Supprimer" asp-route-id="@annonce.Id">
+                                        <button class="btn btn-danger btn-petit" type="submit">Supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
