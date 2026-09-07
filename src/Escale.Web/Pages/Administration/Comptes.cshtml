@@ -45,7 +45,11 @@
                                 @if (compte.Abonnement.Echeance is DateTime echeance)
                                 {
                                     <form method="post" asp-page-handler="Prolonger" asp-route-id="@compte.Id" class="rangee">
-                                        <input type="date" name="echeance" value="@echeance.ToString("yyyy-MM-dd")"
+                                        <label class="hors-ecran" for="echeance-@compte.Id">
+                                            Nouvelle échéance d'abonnement pour @compte.Email
+                                        </label>
+                                        <input type="date" id="echeance-@compte.Id" name="echeance"
+                                               value="@echeance.ToString("yyyy-MM-dd")"
                                                style="min-height:32px;padding:5px 8px;font-size:13px;width:auto" />
                                         <button class="btn btn-second btn-petit" type="submit">Mettre à jour</button>
                                     </form>
