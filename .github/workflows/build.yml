@@ -83,3 +83,22 @@ jobs:
           dotnet build
           dotnet test --no-build --collect:"XPlat Code Coverage"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+      # Sonar lit le code, pas le graphe de dépendances : une faille connue
+      # dans un paquet ne lui apparaît nulle part. Cette étape la cherche
+      # avec l'outil de Microsoft prévu pour cela.
+      # https://learn.microsoft.com/dotnet/core/tools/dotnet-list-package
+      #
+      # Elle vient après l'analyse parce qu'elle exige un restore, déjà fait
+      # par l'étape précédente : la refaire coûterait une minute de plus.
+      #
+      # La commande rend zéro même lorsqu'elle trouve quelque chose, elle est
+      # faite pour être lue par une personne. Il faut donc relire sa sortie
+      # pour arrêter la chaîne, sans quoi la vérification ne vérifierait rien.
+      - name: Check for vulnerable packages
+        shell: pwsh
+        run: |
+          $sortie = dotnet list package --vulnerable --include-transitive
+          $sortie
+          if ($sortie | Select-String -Pattern "has the following vulnerable packages") {
+            throw "Des paquets vulnérables sont présents, voir la liste ci-dessus."
+          }

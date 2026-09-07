@@ -1,0 +1,25 @@
+# Dependabot surveille les dépendances déclarées et ouvre une demande de tirage
+# quand une version corrigée existe. Format décrit ici :
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+#
+# Ce fichier ne couvre que les mises à jour de version. Les alertes de sécurité,
+# elles, s'activent dans les réglages du dépôt, sous « Code security », et non
+# ici. Les deux sont complémentaires : les alertes disent qu'une faille existe,
+# ce fichier propose la montée de version qui la referme.
+version: 2
+
+updates:
+  # Les paquets NuGet des deux projets. La solution est à la racine, Dependabot
+  # suit donc les deux fichiers de projet qu'elle référence.
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Les actions employées par le workflow. C'est ce qui a signalé que
+  # setup-java v4 était déprécié.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
