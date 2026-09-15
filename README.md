@@ -7,8 +7,6 @@ date, fill a cart and pay through a simulated gateway.
 ASP.NET Core 8 Razor Pages, Entity Framework Core and SQLite. One stylesheet, no
 CSS framework, no package from outside the Microsoft stack.
 
-> The user interface is in French, as is the code vocabulary. This README and
-> the repository metadata are in English.
 
 ## Screenshots
 
