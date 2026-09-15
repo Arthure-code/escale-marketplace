@@ -7,7 +7,6 @@ date, fill a cart and pay through a simulated gateway.
 ASP.NET Core 8 Razor Pages, Entity Framework Core and SQLite. One stylesheet, no
 CSS framework, no package from outside the Microsoft stack.
 
-
 ## Screenshots
 
 ### Home and search
@@ -115,7 +114,7 @@ derniers chiffres, les favoris vivent cinq jours dans un cache. Le découpage
 sépare les entités, les interfaces, les dépôts et les services : seul un dépôt
 connaît la base, de sorte qu'aucune page ne sait ce qu'il y a derrière. Les
 comptes reposent sur ASP.NET Core Identity, avec ses pages générées et son
-moteur d'origine. Interface et vocabulaire du code en français.
+moteur d'origine.
 
 ## Licence
 
