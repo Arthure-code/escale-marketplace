@@ -1,5 +1,14 @@
 # escale-marketplace
 
+[![Build](https://github.com/Arthure-code/escale-marketplace/actions/workflows/build.yml/badge.svg)](https://github.com/Arthure-code/escale-marketplace/actions/workflows/build.yml)
+[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Security rating](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Code smells](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+[![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_escale-marketplace&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Arthure-code_escale-marketplace)
+
 A rental marketplace where rooms and cars are booked side by side. Owners
 publish their own listings and decide what the public sees; travellers search by
 date, fill a cart and pay through a simulated gateway.
